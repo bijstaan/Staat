@@ -1,15 +1,15 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 
 namespace NetCoreStatus.Models
 {
-    public class Status : ITimeStampedModel
+    public class ServiceGroup : ITimeStampedModel
     {
         public int Id { get; set; }
-        public string Title { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
-        public string Color { get; set; }
-        public bool IsError { get; set; }
         
+        public List<Service> Services { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastModified { get; set; }
     }

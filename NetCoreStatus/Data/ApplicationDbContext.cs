@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,12 @@ namespace NetCoreStatus.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
+        public DbSet<Incident> Incidents { get; set; }
+        public DbSet<Status> Statuses { get; set; }
+        public DbSet<IncidentMessage> IncidentMessages { get; set; }
+        public DbSet<Service> Services { get; set; }
+        public DbSet<ServiceGroup> ServiceGroups { get; set; }
+        
         public override int SaveChanges()
         {
             var newEntities = this.ChangeTracker.Entries()
@@ -42,10 +49,8 @@ namespace NetCoreStatus.Data
             return base.SaveChanges();
         }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            
         }
     }
 }
