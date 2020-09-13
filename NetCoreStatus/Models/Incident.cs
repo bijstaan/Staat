@@ -14,7 +14,7 @@ namespace NetCoreStatus.Models
         public string Description { get; set; }
         [Required]
         public Service Service { get; set; }
-        public List<IncidentMessage> Messages { get; set; }
+        public ICollection<IncidentMessage> Messages { get; set; }
         
         public DateTime CreatedAt { get; set; }
         public DateTime LastModified { get; set; }

@@ -1,8 +1,60 @@
-﻿@{
+﻿@model IEnumerable<ServiceGroup>
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <div class="accordion" id="accordionExample">
+        @foreach (var group in Model)
+        {
+            <div class="card">
+                <div class="card-header container-fluid" id="@group.Name.Replace(" ", "")">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#@group.Name.Replace(" ", "")Collapse" aria-expanded="false" aria-controls="@group.Name.Replace(" ", "")Collapse">
+                                @group.Name 
+                            </button>
+                        </div>
+                        <div class="col-md-2 float-right">
+                            <button type="button" class="btn btn-sm" data-toggle="tooltip" title="@group.Description">
+                                <span class="iconify" data-icon="mdi:help-circle" data-inline="false"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="@group.Name.Replace(" ", "")Collapse" class="collapse" aria-labelledby="@group.Name" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <div class="accordion" id="accordionServices">
+                            @foreach (var service in group.Services)
+                            {
+                                <div class="card">
+                                    <div class="card-header" id="@service.Name.Replace(" ", "")">
+                                        <h2 class="mb-0">
+                                            <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#@service.Name.Replace(" ", "")Collapse" aria-expanded="false" aria-controls="@service.Name.Replace(" ", "")Collapse">
+                                                <span class="iconify" data-icon="mdi:record" data-inline="true" style="color: @service.Status.Color"></span> @service.Name
+                                            </button>
+                                        </h2>
+                                    </div>
+                                    <div id="@service.Name.Replace(" ", "")Collapse" class="collapse" aria-labelledby="@service.Name" data-parent="#accordionServices">
+                                        <div class="card-body">
+                                            @service.Status.Title
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
+
+@section Scripts
+{
+    <script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+}

@@ -287,6 +287,9 @@ namespace NetCoreStatus.Data.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(1000);
 
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("TEXT");
 
@@ -301,17 +304,14 @@ namespace NetCoreStatus.Data.Migrations
                     b.Property<int?>("ParentId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ServiceGroupId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int?>("StatusId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ParentId");
+                    b.HasIndex("GroupId");
 
-                    b.HasIndex("ServiceGroupId");
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("StatusId");
 
@@ -447,13 +447,13 @@ namespace NetCoreStatus.Data.Migrations
 
             modelBuilder.Entity("NetCoreStatus.Models.Service", b =>
                 {
+                    b.HasOne("NetCoreStatus.Models.ServiceGroup", "Group")
+                        .WithMany("Services")
+                        .HasForeignKey("GroupId");
+
                     b.HasOne("NetCoreStatus.Models.Service", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId");
-
-                    b.HasOne("NetCoreStatus.Models.ServiceGroup", null)
-                        .WithMany("Services")
-                        .HasForeignKey("ServiceGroupId");
 
                     b.HasOne("NetCoreStatus.Models.Status", "Status")
                         .WithMany()

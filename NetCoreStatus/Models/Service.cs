@@ -17,9 +17,10 @@ namespace NetCoreStatus.Models
         public string Link { get; set; }
         
         public Status Status { get; set; }
-        public List<Incident> Incidents { get; set; }
+        public ServiceGroup Group { get; set; }
+        public ICollection<Incident> Incidents { get; set; }
         public Service Parent { get; set; }
-        public List<Service> Children { get; set; }
+        public ICollection<Service> Children { get; set; }
 
 
         public DateTime CreatedAt { get; set; }

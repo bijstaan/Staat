@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NetCoreStatus.Data.Migrations
 {
-    public partial class IntialCreate : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -51,24 +51,24 @@ namespace NetCoreStatus.Data.Migrations
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
                     Link = table.Column<string>(nullable: true),
                     StatusId = table.Column<int>(nullable: true),
+                    GroupId = table.Column<int>(nullable: true),
                     ParentId = table.Column<int>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    LastModified = table.Column<DateTime>(nullable: false),
-                    ServiceGroupId = table.Column<int>(nullable: true)
+                    LastModified = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Services", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Services_Services_ParentId",
-                        column: x => x.ParentId,
-                        principalTable: "Services",
+                        name: "FK_Services_ServiceGroups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "ServiceGroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Services_ServiceGroups_ServiceGroupId",
-                        column: x => x.ServiceGroupId,
-                        principalTable: "ServiceGroups",
+                        name: "FK_Services_Services_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Services",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -147,14 +147,14 @@ namespace NetCoreStatus.Data.Migrations
                 column: "ServiceId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Services_GroupId",
+                table: "Services",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Services_ParentId",
                 table: "Services",
                 column: "ParentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Services_ServiceGroupId",
-                table: "Services",
-                column: "ServiceGroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Services_StatusId",
