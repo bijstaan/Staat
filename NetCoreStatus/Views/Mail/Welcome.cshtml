@@ -1,0 +1,12 @@
+@{
+    ViewBag.Heading = "Welcome!";
+    ViewBag.Preview = "Example Preview!";
+}
+
+<p>
+    @await Component.InvokeAsync("EmailLinkButton", new {text = "test", url = "https://google.com" })
+</p>
+
+@section links {
+    <a href="https://github.com/jamesmh/coravel">Coravel</a>
+}

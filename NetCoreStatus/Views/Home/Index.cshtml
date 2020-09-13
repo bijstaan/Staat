@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ServiceGroup>
+﻿@using System.Linq
+@model IEnumerable<ServiceGroup>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -7,12 +8,17 @@
     <div class="accordion" id="accordionExample">
         @foreach (var group in Model)
         {
+            var openGroup = false;
+            @if (group.Services.Where(t => t.Status.IsDegraded || t.Status.IsError).Count() > 0)
+            {
+                openGroup = true;
+            }
             <div class="card">
                 <div class="card-header container-fluid" id="@group.Name.Replace(" ", "")">
                     <div class="row">
                         <div class="col-md-10">
-                            <button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#@group.Name.Replace(" ", "")Collapse" aria-expanded="false" aria-controls="@group.Name.Replace(" ", "")Collapse">
-                                @group.Name 
+                            <button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#@group.Name.Replace(" ", "")Collapse" aria-expanded="@openGroup" aria-controls="@group.Name.Replace(" ", "")Collapse">
+                                @group.Name
                             </button>
                         </div>
                         <div class="col-md-2 float-right">
@@ -22,20 +28,23 @@
                         </div>
                     </div>
                 </div>
-                <div id="@group.Name.Replace(" ", "")Collapse" class="collapse" aria-labelledby="@group.Name" data-parent="#accordionExample">
+                <div id="@group.Name.Replace(" ", "")Collapse" class="collapse @(openGroup ? "show" : "")" aria-labelledby="@group.Name" data-parent="#accordionExample">
                     <div class="card-body">
-                        <div class="accordion" id="accordionServices">
+                        <div class="accordion" id="@group.Name.Replace(" ", "")accordionServices">
                             @foreach (var service in group.Services)
                             {
                                 <div class="card">
                                     <div class="card-header" id="@service.Name.Replace(" ", "")">
-                                        <h2 class="mb-0">
+                                        <h2 class="mb-0 btn-group d-flex">
+                                            <button type="button" class="btn" data-toggle="tooltip" title="@service.Status.Title">
+                                                <span class="iconify" data-icon="mdi:circle" data-inline="true" style="color: @service.Status.Color"></span>
+                                            </button>
                                             <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#@service.Name.Replace(" ", "")Collapse" aria-expanded="false" aria-controls="@service.Name.Replace(" ", "")Collapse">
-                                                <span class="iconify" data-icon="mdi:record" data-inline="true" style="color: @service.Status.Color"></span> @service.Name
+                                                @service.Name
                                             </button>
                                         </h2>
                                     </div>
-                                    <div id="@service.Name.Replace(" ", "")Collapse" class="collapse" aria-labelledby="@service.Name" data-parent="#accordionServices">
+                                    <div id="@service.Name.Replace(" ", "")Collapse" class="collapse @(service.Status.IsDegraded || service.Status.IsError ? "show" : "")" aria-labelledby="@service.Name.Replace(" ", "")" data-parent="#@group.Name.Replace(" ", "")accordionServices">
                                         <div class="card-body">
                                             @service.Status.Title
                                         </div>
