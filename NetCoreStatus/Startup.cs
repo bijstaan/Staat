@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Coravel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +9,8 @@ using NetCoreStatus.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using NetCoreStatus.Jobs;
 
 namespace NetCoreStatus
 {
@@ -35,14 +33,22 @@ namespace NetCoreStatus
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddMailer(this.Configuration);
+            
+            // Coravel Services
+            services.AddMailer(Configuration);
             services.AddQueue();
             services.AddScheduler();
+
+            // Jobs
+            services.AddTransient<CheckMonitors>();
+            services.AddTransient<SendAdminStatusEmail>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var provider = app.ApplicationServices;
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -69,6 +75,11 @@ namespace NetCoreStatus
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+            });
+            
+            provider.UseScheduler(scheduler =>
+            {
+                scheduler.Schedule<CheckMonitors>().EveryFifteenSeconds();
             });
         }
     }

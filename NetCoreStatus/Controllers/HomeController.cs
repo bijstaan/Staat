@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Coravel.Mailer.Mail.Interfaces;
 using Coravel.Queuing.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NetCoreStatus.Data;
-using NetCoreStatus.Jobs;
 using NetCoreStatus.Models;
 
 namespace NetCoreStatus.Controllers
@@ -19,26 +16,32 @@ namespace NetCoreStatus.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ILogger<HomeController> _logger;
         private readonly IQueue _queue;
+        private readonly IMailer _mailer;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IQueue queue)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IQueue queue, IMailer mailer)
         {
             _context = context;
             _logger = logger;
             _queue = queue;
+            _mailer = mailer;
         }
 
         [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any, NoStore = false)]
         public async Task<IActionResult> Index()
         {
-            var test = await _context.ServiceGroups
-                .Include(group => group.Services).ThenInclude(service => service.Status)
+            var serviceGroups = await _context.ServiceGroups
+                .Include(group => group.Services)
+                .ThenInclude(service => service.Status)
+                .Include(group => group.Services)
+                .ThenInclude(service => service.Children)
+                .ThenInclude(children => children.Status)
                 .ToListAsync();
-            return View(test);
+            return View(serviceGroups);
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Privacy()
         {
-            _queue.QueueInvocable<SendAdminEmail>();
+            //_queue.QueueInvocableWithPayload<SendAdminStatusEmail, Service>(new Service());
             return View();
         }
 

@@ -9,7 +9,7 @@
         @foreach (var group in Model)
         {
             var openGroup = false;
-            @if (group.Services.Where(t => t.Status.IsDegraded || t.Status.IsError).Count() > 0)
+            @if (group.Services.Where(service => service.Status.IsDegraded || service.Status.IsError).Count() > 0)
             {
                 openGroup = true;
             }
@@ -31,10 +31,16 @@
                 <div id="@group.Name.Replace(" ", "")Collapse" class="collapse @(openGroup ? "show" : "")" aria-labelledby="@group.Name" data-parent="#accordionExample">
                     <div class="card-body">
                         <div class="accordion" id="@group.Name.Replace(" ", "")accordionServices">
-                            @foreach (var service in group.Services)
+                            @foreach (var service in group.Services.Where(service => service.Parent == null))
                             {
+                                var openService = false;
+                                @if (service.Children.Where(child => child.Status.IsDegraded || child.Status.IsError).Count() > 0)
+                                {
+                                    openService = true;
+                                }
                                 <div class="card">
                                     <div class="card-header" id="@service.Name.Replace(" ", "")">
+                                        
                                         <h2 class="mb-0 btn-group d-flex">
                                             <button type="button" class="btn" data-toggle="tooltip" title="@service.Status.Title">
                                                 <span class="iconify" data-icon="mdi:circle" data-inline="true" style="color: @service.Status.Color"></span>
@@ -42,11 +48,41 @@
                                             <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#@service.Name.Replace(" ", "")Collapse" aria-expanded="false" aria-controls="@service.Name.Replace(" ", "")Collapse">
                                                 @service.Name
                                             </button>
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" title="@service.Description">
+                                                <span class="iconify" data-icon="mdi:help-circle" data-inline="false"></span>
+                                                </button>
                                         </h2>
                                     </div>
-                                    <div id="@service.Name.Replace(" ", "")Collapse" class="collapse @(service.Status.IsDegraded || service.Status.IsError ? "show" : "")" aria-labelledby="@service.Name.Replace(" ", "")" data-parent="#@group.Name.Replace(" ", "")accordionServices">
+                                    <div id="@service.Name.Replace(" ", "")Collapse" class="collapse @(service.Status.IsDegraded || service.Status.IsError || openService ? "show" : "")" aria-labelledby="@service.Name.Replace(" ", "")" data-parent="#@group.Name.Replace(" ", "")accordionServices">
                                         <div class="card-body">
-                                            @service.Status.Title
+                                            @if (service.Children.Count > 0)
+                                            {
+                                                <div class="accordion" id="@service.Name.Replace(" ", "")accordionServices">
+                                                @foreach (var child in service.Children)
+                                                {
+                                                    <div class="card">
+                                                        <div class="card-header" id="@child.Name.Replace(" ", "")">
+                                                            <h2 class="mb-0 btn-group d-flex">
+                                                                <button type="button" class="btn" data-toggle="tooltip" title="@child.Status.Title">
+                                                                    <span class="iconify" data-icon="mdi:circle" data-inline="true" style="color: @child.Status.Color"></span>
+                                                                </button>
+                                                                <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#@child.Name.Replace(" ", "")Collapse" aria-expanded="false" aria-controls="@child.Name.Replace(" ", "")Collapse">
+                                                                    @child.Name
+                                                                </button>
+                                                                <button type="button" class="btn btn-sm" data-toggle="tooltip" title="@child.Description">
+                                                                    <span class="iconify" data-icon="mdi:help-circle" data-inline="false"></span>
+                                                                    </button>
+                                                            </h2>
+                                                        </div>
+                                                        <div id="@child.Name.Replace(" ", "")Collapse" class="collapse @(child.Status.IsDegraded || child.Status.IsError ? "show" : "")" aria-labelledby="@child.Name.Replace(" ", "")" data-parent="#@service.Name.Replace(" ", "")accordionServices">
+                                                            <div class="card-body">
+                                                                @child.Status.Title
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                 </div>

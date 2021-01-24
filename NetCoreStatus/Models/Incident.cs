@@ -13,6 +13,8 @@ namespace NetCoreStatus.Models
         [Required]
         public string Description { get; set; }
         [Required]
+        public bool Active { get; set; }
+        [Required]
         public Service Service { get; set; }
         public ICollection<IncidentMessage> Messages { get; set; }
         
