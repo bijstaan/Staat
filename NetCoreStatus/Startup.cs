@@ -41,7 +41,7 @@ namespace NetCoreStatus
 
             // Jobs
             services.AddTransient<CheckMonitors>();
-            services.AddTransient<SendAdminStatusEmail>();
+            //services.AddTransient<SendAdminStatusEmail>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

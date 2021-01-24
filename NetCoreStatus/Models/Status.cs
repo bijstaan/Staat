@@ -14,6 +14,12 @@ namespace NetCoreStatus.Models
         public bool IsError { get; set; }
         public bool IsDegraded { get; set; }
         
+        [Required]
+        public bool IsErrorDefault { get; set; }
+        
+        [Required]
+        public bool IsOperationalDefault { get; set; }
+        
         public DateTime CreatedAt { get; set; }
         public DateTime LastModified { get; set; }
     }

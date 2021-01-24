@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
@@ -42,6 +43,7 @@ namespace NetCoreStatus.Jobs
                 {
                     serviceAvailable = CheckTcp(m.Host, m.Port);
                 }
+                Console.WriteLine(m.Service.Name + serviceAvailable.ServiceAvailable);
                 if (!serviceAvailable.ServiceAvailable)
                 {
                     if (m.CurrentIncident == null)
@@ -52,6 +54,7 @@ namespace NetCoreStatus.Jobs
                             Service = m.Service,
                             Description = "Automated Detection: " + serviceAvailable.FailureReason,
                         };
+                        m.Service.Status = _context.Statuses.First(s => s.IsErrorDefault);
                         _queue.QueueInvocableWithPayload<SendAdminStatusEmail, Service>(m.Service);
                         _context.SaveChangesAsync();
                     }
@@ -60,6 +63,7 @@ namespace NetCoreStatus.Jobs
                 {
                     if (m.CurrentIncident != null)
                     {
+                        m.Service.Status = _context.Statuses.First(s => s.IsOperationalDefault);
                         m.CurrentIncident = null;
                         _context.SaveChangesAsync();
                     }
