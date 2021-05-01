@@ -1,5 +1,4 @@
 using HotChocolate;
-using HotChocolate.Types.Relay;
 
 namespace Staat.GraphQL.Mutations.Inputs.ServiceGroup
 {
