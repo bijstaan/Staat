@@ -12,6 +12,7 @@
         <PackageReference Include="HotChocolate.Data.EntityFramework" Version="11.2.2" />
         <PackageReference Include="HotChocolate.PersistedQueries.InMemory" Version="11.2.2" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.5" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.5">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -23,6 +24,17 @@
 
     <ItemGroup>
       <Folder Include="wwwroot" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\assets\css\app.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\img\logo.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\js\about.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\js\about.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\js\app.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\js\app.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\js\chunk-vendors.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\js\chunk-vendors.js.map" />
     </ItemGroup>
 
 </Project>
