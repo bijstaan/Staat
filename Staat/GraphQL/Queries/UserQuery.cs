@@ -12,7 +12,7 @@ namespace Staat.GraphQL.Queries
     public class UserQuery
     {
         [UseApplicationContext]
-        [UsePaging]
+        [UsePaging(MaxPageSize = 50)]
         [UseProjection]
         [UseFiltering]
         [UseSorting]
