@@ -20,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.Types;
+using Microsoft.AspNetCore.Authorization;
 using Staat.Data;
 using Staat.Extensions;
 using Staat.GraphQL.Mutations.Inputs.ServiceGroup;
@@ -45,7 +46,7 @@ namespace Staat.GraphQL.Mutations
             await context.SaveChangesAsync(cancellationToken);
             return new ServiceGroupBasePayload(serviceGroup);
         }
-
+        
         [UseApplicationContext]
         public async Task<ServiceGroupBasePayload> UpdateServiceGroupAsync(UpdateServiceGroupInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)

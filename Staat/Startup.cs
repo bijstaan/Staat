@@ -106,6 +106,10 @@ namespace Staat
             });
 
             services.AddControllers();
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "WebApp/dist";
+            });
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "Staat", Version = "v1"}); });
         }
 
@@ -125,15 +129,34 @@ namespace Staat
             
             app.UseDefaultFiles();
             app.UseStaticFiles();
+            if (!env.IsDevelopment())
+            {
+                app.UseSpaStaticFiles();
+            }
 
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseWebSockets();
-            
             app.UseEndpoints(endpoints => { 
                 endpoints.MapControllers();
                 endpoints.MapGraphQL();
+            });
+            
+            app.UseSpa(spa =>
+            {
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
+
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    // if you just prefer to proxy requests from client app, use proxy to SPA dev server instead,
+                    // app should be already running before starting a .NET client:
+                    // run npm process with client app
+                    spa.UseProxyToSpaDevelopmentServer($"http://localhost:8080"); // your Vue app port
+                }
             });
         }
     }
