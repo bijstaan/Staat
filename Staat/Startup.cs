@@ -55,6 +55,7 @@ namespace Staat
             });
 
             services.AddGraphQLServer()
+                .AddAuthorization()
                 .AddProjections()
                 .AddFiltering()
                 .AddSorting()

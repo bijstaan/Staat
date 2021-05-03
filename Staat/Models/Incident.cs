@@ -19,6 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using HotChocolate.AspNetCore.Authorization;
+using Staat.Models.Users;
 
 namespace Staat.Models
 {
@@ -30,6 +32,8 @@ namespace Staat.Models
         [Required] public bool Active { get; set; }
         [Required] public Service Service { get; set; }
         public ICollection<IncidentMessage> Messages { get; set; }
+        // We do not display the author publicly
+        [Required][Authorize] public User Author { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
