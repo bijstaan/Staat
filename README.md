@@ -11,6 +11,13 @@ An open-source .NET Core C# Status Page and service monitoring tool. Includes:
 - Easy to use SPA Dashboard for IT Admins (Incident Reporting)
 - Simple Deployment
 
+### Future Plans
+- Async cluster, no central database
+  - Goal is to allow multiple installs to link together with no central database
+  - Would allow easy install across many platforms with no external dependencies
+  - Prevents failure due to database errors or other issues
+  
+
 ### Why the AGPL v3 License
 To make this decision clearer we first need to clear up some misconceptions that companies seem to have:
 

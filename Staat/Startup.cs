@@ -19,6 +19,7 @@
 using System;
 using System.Text;
 using System.Threading.Tasks;
+using Coravel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,7 @@ using Staat.Data;
 using Staat.GraphQL.Mutations;
 using Staat.Services;
 using Staat.GraphQL.Queries;
+using Staat.Jobs;
 
 namespace Staat
 {
@@ -48,12 +50,26 @@ namespace Staat
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            /*
+             * Database Section
+             */
             services.AddPooledDbContextFactory<ApplicationDbContext>(options =>
             {
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
                 options.UseMemoryCache(new MemoryCache(new MemoryCacheOptions()));
             });
+            
+            /*
+             * Coravel Section
+             */
+            services.AddScheduler();
+            services.AddQueue();
 
+            services.AddTransient<CheckForJobs>();
+
+            /*
+             * GraphQL Section
+             */
             services.AddGraphQLServer()
                 .AddAuthorization()
                 .AddProjections()
@@ -69,9 +85,16 @@ namespace Staat
                 .AddMutationType(d => d.Name("Mutation"))
                 .AddTypeExtension<ServiceGroupMutation>();
 
+            /*
+             * MISC. Area
+             */
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<DbContext, ApplicationDbContext>();
+            
+            /*
+             * Authentication Area
+             */
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -106,6 +129,9 @@ namespace Staat
                 };
             });
 
+            /*
+             * Routing Section
+             */
             services.AddControllers();
             services.AddSpaStaticFiles(configuration =>
             {
@@ -149,7 +175,7 @@ namespace Staat
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
                 // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = "WebApp";
 
                 if (env.IsDevelopment())
                 {
@@ -158,6 +184,12 @@ namespace Staat
                     // run npm process with client app
                     spa.UseProxyToSpaDevelopmentServer($"http://localhost:8080"); // your Vue app port
                 }
+            });
+            
+            var provider = app.ApplicationServices;
+            provider.UseScheduler(scheduler =>
+            {
+                scheduler.Schedule<CheckForJobs>().EverySecond();
             });
         }
     }
