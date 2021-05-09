@@ -17,18 +17,30 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Staat.Models
 {
-    public class Monitor : ITimeStampedModel
+    public class Monitor : ITimeStampedModel, IEnumerable
     {
         [Key] public int Id { get; set; }
-        [Required] public string Type { get; set; }
+        public virtual int MonitorTypeId { get; set; }
+        [EnumDataType(typeof(MonitorType))]
+        [Required]
+        public MonitorType Type
+        {
+            get => (MonitorType) MonitorTypeId;
+            set => MonitorTypeId = (int) value;
+        }
+
         [Required] public string Host { get; set; }
         public int? Port { get; set; }
         public bool? ValidateSsl { get; set; }
+        [Required] public string MonitorCron { get; set; }
+        [Required] public DateTime NextRunTime { get; set; }
+        [Required] public DateTime LastRunTime { get; set; }
 
         public Incident CurrentIncident { get; set; }
         [Required] public Service Service { get; set; }
@@ -36,5 +48,9 @@ namespace Staat.Models
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public IEnumerator GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
