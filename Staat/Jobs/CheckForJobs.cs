@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using Coravel.Invocable;
-using Cronos;
 using Microsoft.EntityFrameworkCore;
 using Staat.Data;
+using Staat.Models;
 
 namespace Staat.Jobs
 {
@@ -23,6 +23,10 @@ namespace Staat.Jobs
             {
                 if (monitor.NextRunTime <= DateTime.UtcNow)
                 {
+                    if (monitor.Type == MonitorType.HTTP)
+                    {
+                        
+                    }
                     var nextRun= DateTime.UtcNow.Add(TimeSpan.Parse(monitor.MonitorCron));
                     monitor.NextRunTime = nextRun;
                 }
