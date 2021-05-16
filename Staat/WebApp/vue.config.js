@@ -17,6 +17,17 @@
  */
 
 module.exports = {
-    assetsDir: 'assets',
-    filenameHashing: false
+ assetsDir: 'assets',
+ filenameHashing: false,
+
+ pluginOptions: {
+   quasar: {
+     importStrategy: 'kebab',
+     rtlSupport: false
+   }
+ },
+
+ transpileDependencies: [
+   'quasar'
+ ]
 }
