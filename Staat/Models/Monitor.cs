@@ -17,16 +17,18 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using HotChocolate.Data;
 
 namespace Staat.Models
 {
-    public class Monitor : ITimeStampedModel, IEnumerable
+    public class Monitor : ITimeStampedModel
     {
         [Key] public int Id { get; set; }
-        public virtual int MonitorTypeId { get; set; }
+        [JsonIgnore] public virtual int MonitorTypeId { get; set; }
+
         [EnumDataType(typeof(MonitorType))]
         [Required]
         public MonitorType Type
@@ -44,13 +46,10 @@ namespace Staat.Models
 
         public Incident CurrentIncident { get; set; }
         [Required] public Service Service { get; set; }
-        public ICollection<MonitorData> Data { get; set; }
+
+        [UseFiltering] [UseSorting] public ICollection<MonitorData> MonitorData { get; set; }
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public IEnumerator GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

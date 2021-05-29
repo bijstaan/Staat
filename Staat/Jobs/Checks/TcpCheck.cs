@@ -16,23 +16,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using HotChocolate.Data;
+using System.Threading.Tasks;
+using Staat.Data;
+using Staat.Models;
 
-namespace Staat.Models
+namespace Staat.Jobs.Checks
 {
-    public class ServiceGroup : ITimeStampedModel
+    public class TcpCheck
     {
-        [Key] public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public bool DefaultOpen { get; set; }
+        public TcpCheck(ApplicationDbContext context)
+        {
+            throw new System.NotImplementedException();
+        }
 
-        [UseFiltering] [UseSorting] public ICollection<Service> Services { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public async Task Invoke(Monitor monitor)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
