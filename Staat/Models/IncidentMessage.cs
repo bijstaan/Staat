@@ -29,9 +29,11 @@ namespace Staat.Models
         [Key] public int Id { get; set; }
         [Required] public string Message { get; set; }
         [Required] public Status Status { get; set; }
+
         [Required] public Incident Incident { get; set; }
+
         // We do not display the author publicly
-        [Required][Authorize] public User Author { get; set; }
+        [Required] [Authorize] public User Author { get; set; }
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

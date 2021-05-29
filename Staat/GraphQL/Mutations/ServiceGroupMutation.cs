@@ -57,7 +57,7 @@ namespace Staat.GraphQL.Mutations
             if (serviceGroup is null)
             {
                 return new ServiceGroupBasePayload(
-                    new UserError("Speaker with id not found.", "SPEAKER_NOT_FOUND"));
+                    new UserError("Service Group with id not found.", "SPEAKER_NOT_FOUND"));
             }
 
             if (input.Name.HasValue)

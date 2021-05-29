@@ -20,6 +20,7 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using Coravel;
+using HotChocolate.Language;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -53,18 +54,37 @@ namespace Staat
             /*
              * Database Section
              */
-            services.AddPooledDbContextFactory<ApplicationDbContext>(options =>
+            var databaseType = Configuration.GetSection("App")["DatabaseType"].ToUpper();
+            switch (databaseType)
             {
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
-                options.UseMemoryCache(new MemoryCache(new MemoryCacheOptions()));
-            });
+                case "MYSQL":
+                    services.AddPooledDbContextFactory<ApplicationDbContext>(ConfigureMySqlDatabase);
+                    break;
+                case "SQLSERVER":
+                    services.AddPooledDbContextFactory<ApplicationDbContext>(ConfigureMssqlDatabase);
+                    break;
+                case "POSTGRESQL":
+                    services.AddPooledDbContextFactory<ApplicationDbContext>(ConfigurePostgreSqlDatabase);
+                    break;
+                case "SQLITE":
+                    services.AddPooledDbContextFactory<ApplicationDbContext>(ConfigureSqliteDatabase);
+                    break;
+                default:
+                    throw new Exception($"Unsupported provider: {databaseType}");
+            }
+
+
+            /*
+             * Cache Section
+             */
+            services.AddMemoryCache();
+            services.AddSha256DocumentHashProvider(HashFormat.Hex);
             
             /*
              * Coravel Section
              */
             services.AddScheduler();
             services.AddQueue();
-
             services.AddTransient<CheckForJobs>();
 
             /*
@@ -82,8 +102,11 @@ namespace Staat
                 .AddTypeExtension<IncidentQuery>()
                 .AddTypeExtension<SettingsQuery>()
                 .AddTypeExtension<UserQuery>()
+                .AddTypeExtension<MonitorQuery>()
                 .AddMutationType(d => d.Name("Mutation"))
-                .AddTypeExtension<ServiceGroupMutation>();
+                .AddTypeExtension<ServiceGroupMutation>()
+                .UseAutomaticPersistedQueryPipeline()
+                .AddInMemoryQueryStorage();
 
             /*
              * MISC. Area
@@ -141,8 +164,9 @@ namespace Staat
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDbContextFactory<ApplicationDbContext> context)
         {
+            context.CreateDbContext().Database.Migrate();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -187,10 +211,43 @@ namespace Staat
             });
             
             var provider = app.ApplicationServices;
+            provider.ConfigureQueue().OnError(e =>
+            {
+                Console.WriteLine(e.StackTrace);
+            });
             provider.UseScheduler(scheduler =>
             {
-                scheduler.Schedule<CheckForJobs>().EverySecond();
+                scheduler.Schedule<CheckForJobs>().EveryFiveSeconds();
             });
+        }
+        
+        /*
+         * Database configurations
+         * All of these use the MemoryCache to make queries nice and fast for repeat things (home page)
+         */
+        private void ConfigureMySqlDatabase(DbContextOptionsBuilder options)
+        {
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            options.UseMemoryCache(new MemoryCache(new MemoryCacheOptions()));
+        }
+        
+        private void ConfigurePostgreSqlDatabase(DbContextOptionsBuilder options)
+        {
+            options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+            options.UseMemoryCache(new MemoryCache(new MemoryCacheOptions()));
+        }
+        
+        private void ConfigureMssqlDatabase(DbContextOptionsBuilder options)
+        {
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            options.UseMemoryCache(new MemoryCache(new MemoryCacheOptions()));
+        }
+        
+        private void ConfigureSqliteDatabase(DbContextOptionsBuilder options)
+        {
+            options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+            options.UseMemoryCache(new MemoryCache(new MemoryCacheOptions()));
         }
     }
 }

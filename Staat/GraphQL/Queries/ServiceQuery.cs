@@ -34,6 +34,6 @@ namespace Staat.GraphQL.Queries
         [UseProjection]
         [UseFiltering]
         [UseSorting]
-        public IQueryable<Service> GetServices([ScopedService] ApplicationDbContext context) => context.Service;
+        public IQueryable<Service> GetServices([ScopedService] ApplicationDbContext context) => context.Service.AsQueryable();
     }
 }
