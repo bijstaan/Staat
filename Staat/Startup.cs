@@ -54,23 +54,27 @@ namespace Staat
             /*
              * Database Section
              */
-            var databaseType = Configuration.GetSection("App")["DatabaseType"].ToUpper();
-            switch (databaseType)
+            try
             {
-                case "MYSQL":
-                    services.AddPooledDbContextFactory<ApplicationDbContext>(ConfigureMySqlDatabase);
-                    break;
-                case "SQLSERVER":
-                    services.AddPooledDbContextFactory<ApplicationDbContext>(ConfigureMssqlDatabase);
-                    break;
-                case "POSTGRESQL":
-                    services.AddPooledDbContextFactory<ApplicationDbContext>(ConfigurePostgreSqlDatabase);
-                    break;
-                case "SQLITE":
-                    services.AddPooledDbContextFactory<ApplicationDbContext>(ConfigureSqliteDatabase);
-                    break;
-                default:
-                    throw new Exception($"Unsupported provider: {databaseType}");
+                var databaseType = Configuration.GetSection("App")["DatabaseType"].ToUpper();
+                switch (databaseType)
+                {
+                    case "MYSQL":
+                        services.AddPooledDbContextFactory<ApplicationDbContext>(ConfigureMySqlDatabase);
+                        break;
+                    case "SQLSERVER":
+                        services.AddPooledDbContextFactory<ApplicationDbContext>(ConfigureMssqlDatabase);
+                        break;
+                    case "POSTGRESQL":
+                        services.AddPooledDbContextFactory<ApplicationDbContext>(ConfigurePostgreSqlDatabase);
+                        break;
+                    default:
+                        throw new Exception($"Unsupported provider: {databaseType}");
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
             }
 
 
@@ -241,12 +245,6 @@ namespace Staat
         private void ConfigureMssqlDatabase(DbContextOptionsBuilder options)
         {
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            options.UseMemoryCache(new MemoryCache(new MemoryCacheOptions()));
-        }
-        
-        private void ConfigureSqliteDatabase(DbContextOptionsBuilder options)
-        {
-            options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             options.UseMemoryCache(new MemoryCache(new MemoryCacheOptions()));
         }
     }

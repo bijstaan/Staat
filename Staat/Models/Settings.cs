@@ -25,7 +25,8 @@ namespace Staat.Models
     [Index(nameof(Key))]
     public class Settings : ITimeStampedModel
     {
-        [Key] public string Key { get; set; }
+        [Key] public int Id { get; set; }
+        public string Key { get; set; }
 
         public string Value { get; set; }
         public DateTime CreatedAt { get; set; }
