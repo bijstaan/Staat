@@ -39,6 +39,7 @@
       <_ContentIncludedByDefault Remove="wwwroot\assets\js\app.js.map" />
       <_ContentIncludedByDefault Remove="wwwroot\assets\js\chunk-vendors.js" />
       <_ContentIncludedByDefault Remove="wwwroot\assets\js\chunk-vendors.js.map" />
+      <_ContentIncludedByDefault Remove="WebApp\dist\manifest.json" />
     </ItemGroup>
 
 </Project>

@@ -29,8 +29,7 @@ namespace Staat.Models
         [Key] public int Id { get; set; }
         [JsonIgnore] public virtual int MonitorTypeId { get; set; }
 
-        [EnumDataType(typeof(MonitorType))]
-        [Required]
+        [EnumDataType(typeof(MonitorType)), Required]
         public MonitorType Type
         {
             get => (MonitorType) MonitorTypeId;
@@ -40,14 +39,14 @@ namespace Staat.Models
         [Required] public string Host { get; set; }
         public int? Port { get; set; }
         public bool? ValidateSsl { get; set; }
-        [Required] public string MonitorCron { get; set; }
+        [Required, MaxLength(14), StringLength(14)] public string MonitorCron { get; set; }
         [Required] public DateTime NextRunTime { get; set; }
         [Required] public DateTime LastRunTime { get; set; }
 
         public Incident CurrentIncident { get; set; }
         [Required] public Service Service { get; set; }
 
-        [UseFiltering] [UseSorting] public ICollection<MonitorData> MonitorData { get; set; }
+        [UseFiltering, UseSorting] public ICollection<MonitorData> MonitorData { get; set; }
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

@@ -26,11 +26,11 @@ namespace Staat.Models
     public class ServiceGroup : ITimeStampedModel
     {
         [Key] public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        [Required, MaxLength(100), StringLength(100)] public string Name { get; set; }
+        [MaxLength(255), StringLength(255)] public string Description { get; set; }
         public bool DefaultOpen { get; set; }
 
-        [UseFiltering] [UseSorting] public ICollection<Service> Services { get; set; }
+        [UseFiltering, UseSorting] public ICollection<Service> Services { get; set; }
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

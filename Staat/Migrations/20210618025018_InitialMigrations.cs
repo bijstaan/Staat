@@ -21,7 +21,7 @@ namespace Staat.Migrations
                         {
                             Id = table.Column<int>(type: "INTEGER", nullable: false)
                                 .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                            Name = table.Column<string>(type: "VARCHAR(60)", maxLength: 60, nullable: false),
+                            Name = table.Column<string>(type: "VARCHAR(100)", maxLength: 100, nullable: false),
                             Description = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: true),
                             Color = table.Column<string>(type: "VARCHAR(25)", nullable: false, maxLength: 25),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
@@ -38,7 +38,7 @@ namespace Staat.Migrations
                             Id = table.Column<int>(nullable: false)
                                 .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                             Key = table.Column<string>(type: "TEXT", nullable: false),
-                            Value = table.Column<string>(type: "TEXT", nullable: true),
+                            Value = table.Column<string>(type: "TEXT", nullable: false),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
                             UpdatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false)
                         },
@@ -68,7 +68,7 @@ namespace Staat.Migrations
                         {
                             Id = table.Column<int>(type: "INTEGER", nullable: false)
                                 .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                            Name = table.Column<string>(type: "VARCHAR(60)", nullable: true, maxLength: 60),
+                            Name = table.Column<string>(type: "VARCHAR(100)", nullable: false, maxLength: 100),
                             Description = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: true),
                             DefaultOpen = table.Column<bool>(type: "INT", defaultValue: false, nullable: false),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
@@ -84,11 +84,11 @@ namespace Staat.Migrations
                         {
                             Id = table.Column<int>(type: "INTEGER", nullable: false)
                                 .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                            Name = table.Column<string>(type: "VARCHAR(60)", maxLength: 60, nullable: false),
+                            Name = table.Column<string>(type: "VARCHAR(100)", maxLength: 100, nullable: false),
                             Description = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: true),
                             Url = table.Column<string>(type: "TEXT", nullable: true),
-                            StatusId = table.Column<int>(type: "INTEGER", nullable: true),
-                            GroupId = table.Column<int>(type: "INTEGER", nullable: true),
+                            StatusId = table.Column<int>(type: "INTEGER", nullable: false),
+                            GroupId = table.Column<int>(type: "INTEGER", nullable: false),
                             ParentId = table.Column<int>(type: "INTEGER", nullable: true),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
                             UpdatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false)
@@ -247,7 +247,7 @@ namespace Staat.Migrations
                         {
                             Id = table.Column<int>(type: "INTEGER", nullable: false)
                                 .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                            Name = table.Column<string>(type: "NVARCHAR(60)", maxLength: 60, nullable: false),
+                            Name = table.Column<string>(type: "NVARCHAR(100)", maxLength: 100, nullable: false),
                             Description = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: true),
                             Color = table.Column<string>(type: "NVARCHAR(25)", nullable: false, maxLength: 25),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
@@ -264,7 +264,7 @@ namespace Staat.Migrations
                             Id = table.Column<int>(nullable: false)
                                 .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                             Key = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false),
-                            Value = table.Column<string>(type: "NVARCHAR(MAX)", nullable: true),
+                            Value = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
                             UpdatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false)
                         },
@@ -294,7 +294,7 @@ namespace Staat.Migrations
                         {
                             Id = table.Column<int>(type: "INTEGER", nullable: false)
                                 .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                            Name = table.Column<string>(type: "NVARCHAR(60)", nullable: true, maxLength: 60),
+                            Name = table.Column<string>(type: "NVARCHAR(100)", nullable: false, maxLength: 100),
                             Description = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: true),
                             DefaultOpen = table.Column<bool>(type: "INT", defaultValue: false, nullable: false),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
@@ -310,11 +310,11 @@ namespace Staat.Migrations
                         {
                             Id = table.Column<int>(type: "INTEGER", nullable: false)
                                 .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                            Name = table.Column<string>(type: "NVARCHAR(60)", maxLength: 60, nullable: false),
+                            Name = table.Column<string>(type: "NVARCHAR(100)", maxLength: 100, nullable: false),
                             Description = table.Column<string>(type: "NVARCHAR(255)", maxLength: 255, nullable: true),
                             Url = table.Column<string>(type: "NVARCHAR(MAX)", nullable: true),
-                            StatusId = table.Column<int>(type: "INTEGER", nullable: true),
-                            GroupId = table.Column<int>(type: "INTEGER", nullable: true),
+                            StatusId = table.Column<int>(type: "INTEGER", nullable: false),
+                            GroupId = table.Column<int>(type: "INTEGER", nullable: false),
                             ParentId = table.Column<int>(type: "INTEGER", nullable: true),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
                             UpdatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false)
@@ -473,7 +473,7 @@ namespace Staat.Migrations
                         {
                             Id = table.Column<int>(type: "INTEGER", nullable: false)
                                 .Annotation("MySQL:AutoIncrement", true),
-                            Name = table.Column<string>(type: "VARCHAR(60)", maxLength: 60, nullable: false),
+                            Name = table.Column<string>(type: "VARCHAR(100)", maxLength: 100, nullable: false),
                             Description = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: true),
                             Color = table.Column<string>(type: "VARCHAR(25)", nullable: false, maxLength: 25),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
@@ -490,7 +490,7 @@ namespace Staat.Migrations
                             Id = table.Column<int>(nullable: false)
                                 .Annotation("MySQL:AutoIncrement", true),
                             Key = table.Column<string>(type: "TEXT", nullable: false),
-                            Value = table.Column<string>(type: "TEXT", nullable: true),
+                            Value = table.Column<string>(type: "TEXT", nullable: false),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
                             UpdatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false)
                         },
@@ -520,7 +520,7 @@ namespace Staat.Migrations
                         {
                             Id = table.Column<int>(type: "INTEGER", nullable: false)
                                 .Annotation("MySQL:AutoIncrement", true),
-                            Name = table.Column<string>(type: "VARCHAR(60)", nullable: true, maxLength: 60),
+                            Name = table.Column<string>(type: "VARCHAR(100)", nullable: false, maxLength: 100),
                             Description = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: true),
                             DefaultOpen = table.Column<bool>(type: "INT", defaultValue: false, nullable: false),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
@@ -536,11 +536,11 @@ namespace Staat.Migrations
                         {
                             Id = table.Column<int>(type: "INTEGER", nullable: false)
                                 .Annotation("MySQL:AutoIncrement", true),
-                            Name = table.Column<string>(type: "VARCHAR(60)", maxLength: 60, nullable: false),
+                            Name = table.Column<string>(type: "VARCHAR(100)", maxLength: 100, nullable: false),
                             Description = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: true),
                             Url = table.Column<string>(type: "TEXT", nullable: true),
-                            StatusId = table.Column<int>(type: "INTEGER", nullable: true),
-                            GroupId = table.Column<int>(type: "INTEGER", nullable: true),
+                            StatusId = table.Column<int>(type: "INTEGER", nullable: false),
+                            GroupId = table.Column<int>(type: "INTEGER", nullable: false),
                             ParentId = table.Column<int>(type: "INTEGER", nullable: true),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
                             UpdatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false)

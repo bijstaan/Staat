@@ -28,15 +28,15 @@ namespace Staat.Models
     public class Incident : ITimeStampedModel
     {
         [Key] public int Id { get; set; }
-        [Required] [StringLength(255)] public string Title { get; set; }
+        [Required, MaxLength(100), StringLength(100)] public string Title { get; set; }
         [Required] public string Description { get; set; }
         [Required] public bool Active { get; set; }
         [Required] public Service Service { get; set; }
 
-        [UseFiltering] [UseSorting] public ICollection<IncidentMessage> Messages { get; set; }
+        [UseFiltering, UseSorting] public ICollection<IncidentMessage> Messages { get; set; }
 
         // We do not display the author publicly
-        [Required] [Authorize] public User Author { get; set; }
+        [Required, Authorize] public User Author { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

@@ -26,19 +26,23 @@ namespace Staat.Models
     public class Service : ITimeStampedModel
     {
         [Key] public int Id { get; set; }
-        [Required] [StringLength(255)] public string Name { get; set; }
-        [StringLength(255)] public string Description { get; set; }
+        
+        [Required, MaxLength(100), StringLength(100)] public string Name { get; set; }
+
+        [StringLength(255), MaxLength(255)] public string Description { get; set; }
         [Url] public string Url { get; set; }
 
         [Required] public Status Status { get; set; }
 
-        [UseFiltering] [UseSorting] public ICollection<Incident> Incidents { get; set; }
-        public ServiceGroup Group { get; set; }
+        [UseFiltering, UseSorting] public ICollection<Incident> Incidents { get; set; }
+        [Required] public ServiceGroup Group { get; set; }
         public Service Parent { get; set; }
 
-        [UseFiltering] [UseSorting] public ICollection<Service> Children { get; set; }
+        [UseFiltering, UseSorting] public ICollection<Service> Children { get; set; }
 
-        [UseFiltering] [UseSorting] public ICollection<Monitor> Monitors { get; set; }
+        [UseFiltering, UseSorting] public ICollection<Monitor> Monitors { get; set; }
+
+        [UseFiltering, UseSorting] public ICollection<Maintenance> Maintenance { get; set; }
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

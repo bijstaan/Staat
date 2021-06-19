@@ -26,9 +26,9 @@ namespace Staat.Models
     public class Settings : ITimeStampedModel
     {
         [Key] public int Id { get; set; }
-        public string Key { get; set; }
+        [Required] public string Key { get; set; }
 
-        public string Value { get; set; }
+        [Required] public string Value { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
