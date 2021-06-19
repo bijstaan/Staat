@@ -18,7 +18,15 @@ An open-source .NET Core C# Status Page and service monitoring tool. Includes:
   - Prevents failure due to database errors or other issues
   
 
-### Why the AGPL v3 License
+## Installation
+
+### Logging In
+The default credentials are:
+
+Email: admin@staat.local
+Password: StaatIsAwesome!
+
+## Why the AGPL v3 License
 To make this decision clearer we first need to clear up some misconceptions that companies seem to have:
 
 What AGPL does **NOT** stop:
