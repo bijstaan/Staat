@@ -27,13 +27,13 @@ using Staat.Models;
 namespace Staat.GraphQL.Queries
 {
     [ExtendObjectType(OperationTypeNames.Query)]
-    public class IncidentQuery
+    public class MaintenanceQuery
     {
         [UseApplicationContext]
         [UsePaging(MaxPageSize = 50)]
         [UseProjection]
         [UseFiltering]
         [UseSorting]
-        public IQueryable<Incident> GetIncidents([ScopedService] ApplicationDbContext context) => context.Incident.AsQueryable();
+        public IQueryable<Maintenance> GetMaintenance([ScopedService] ApplicationDbContext context) => context.Maintenance.AsQueryable();
     }
 }

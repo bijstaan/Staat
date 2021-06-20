@@ -26,7 +26,7 @@ using Staat.Models.Users;
 
 namespace Staat.GraphQL.Queries
 {
-    [ExtendObjectType(Name = "Query")]
+    [ExtendObjectType(OperationTypeNames.Query)]
     public class UserQuery
     {
         [UseApplicationContext]

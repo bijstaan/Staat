@@ -26,7 +26,7 @@ using Staat.Models;
 
 namespace Staat.GraphQL.Queries
 {
-    [ExtendObjectType(Name = "Query")]
+    [ExtendObjectType(OperationTypeNames.Query)]
     public class ServiceGroupQuery
     {
         [UseApplicationContext]

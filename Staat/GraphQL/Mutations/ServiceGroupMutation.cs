@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#nullable enable
 using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
@@ -30,7 +31,7 @@ using Staat.Models;
 
 namespace Staat.GraphQL.Mutations
 {
-    [ExtendObjectType(Name = "Mutation")]
+    [ExtendObjectType(OperationTypeNames.Mutation)]
     [Authorize]
     public class ServiceGroupMutation
     {

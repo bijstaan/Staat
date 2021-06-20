@@ -107,6 +107,7 @@ namespace Staat
                 .AddTypeExtension<SettingsQuery>()
                 .AddTypeExtension<UserQuery>()
                 .AddTypeExtension<MonitorQuery>()
+                .AddTypeExtension<MaintenanceQuery>()
                 .AddMutationType(d => d.Name("Mutation"))
                 .AddTypeExtension<ServiceGroupMutation>()
                 .UseAutomaticPersistedQueryPipeline()

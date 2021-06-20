@@ -33,6 +33,8 @@ namespace Staat.Data
         public DbSet<Status> Status { get; set; }
         public DbSet<Incident> Incident { get; set; }
         public DbSet<IncidentMessage> IncidentMessage { get; set; }
+        public DbSet<Maintenance> Maintenance { get; set; }
+        public DbSet<MaintenanceMessage> MaintenanceMessage { get; set; }
         public DbSet<Models.Monitor> Monitor { get; set; }
         public DbSet<MonitorData> MonitorData { get; set; }
         public DbSet<Settings> Settings { get; set; }
