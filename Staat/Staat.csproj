@@ -2,6 +2,9 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
+        <PublishTrimmed>true</PublishTrimmed>
+        <TrimMode>Link</TrimMode>
+        <PublishReadyToRun>true</PublishReadyToRun>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,6 +16,7 @@
         <PackageReference Include="HotChocolate.Data" Version="11.3.0" />
         <PackageReference Include="HotChocolate.Data.EntityFramework" Version="11.3.0" />
         <PackageReference Include="HotChocolate.PersistedQueries.InMemory" Version="11.3.0" />
+        <PackageReference Include="Markdig" Version="0.25.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.7" />
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.7" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.7">
@@ -24,22 +28,6 @@
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.11.1" />
+        <PackageReference Include="WebStoating.Markdig.Prism" Version="1.0.0" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="wwwroot" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="wwwroot\assets\css\app.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\assets\img\logo.png" />
-      <_ContentIncludedByDefault Remove="wwwroot\assets\js\about.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\assets\js\about.js.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\assets\js\app.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\assets\js\app.js.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\assets\js\chunk-vendors.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\assets\js\chunk-vendors.js.map" />
-      <_ContentIncludedByDefault Remove="WebApp\dist\manifest.json" />
-    </ItemGroup>
-
 </Project>

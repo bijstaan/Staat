@@ -10,7 +10,7 @@ using Staat.Data;
 namespace Staat.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210618034716_InsertBaseData")]
+    [Migration("20210626112316_InsertBaseData")]
     partial class InsertBaseData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,13 +27,17 @@ namespace Staat.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
+                    
 
                     b.Property<int?>("AuthorId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("StartedAt")
+                        .HasColumnType("datetime2");
+                    
+                    b.Property<DateTime>("EndedAt")
+                        .HasColumnType("datetime2");
+                    
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -41,6 +45,10 @@ namespace Staat.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("DescriptionHtml")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+                    
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
 
@@ -78,6 +86,10 @@ namespace Staat.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+                    
+                    b.Property<string>("MessageHtml")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

@@ -21,6 +21,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Staat.Helpers;
 using Staat.Models;
 using Staat.Models.Users;
 
@@ -91,6 +92,24 @@ namespace Staat.Data
                          x.Entity as ITimeStampedModel != null
                 )
                 .Select(x => x.Entity as ITimeStampedModel);
+
+            var incidentEntities = this.ChangeTracker.Entries()
+                .Where(x => (x.State == EntityState.Modified || x.State == EntityState.Added) && x.Entity != null && x.Entity as Incident != null)
+                .Select(x => x.Entity as Incident);
+
+            foreach (var entity in incidentEntities)
+            {
+                if (entity != null) entity.DescriptionHtml = MarkdownHelper.ToHtml(entity.Description);
+            }
+            
+            var incidentMessageEntities = this.ChangeTracker.Entries()
+                .Where(x => (x.State == EntityState.Modified || x.State == EntityState.Added) && x.Entity != null && x.Entity as IncidentMessage != null)
+                .Select(x => x.Entity as IncidentMessage);
+
+            foreach (var entity in incidentMessageEntities)
+            {
+                if (entity != null) entity.MessageHtml = MarkdownHelper.ToHtml(entity.Message);
+            }
 
             foreach (var newEntity in newEntities)
             {

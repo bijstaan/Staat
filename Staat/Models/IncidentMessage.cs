@@ -28,6 +28,7 @@ namespace Staat.Models
     {
         [Key] public int Id { get; set; }
         [Required] public string Message { get; set; }
+        [Required] public string MessageHtml { get; set; }
         [Required] public Status Status { get; set; }
 
         [Required] public Incident Incident { get; set; }

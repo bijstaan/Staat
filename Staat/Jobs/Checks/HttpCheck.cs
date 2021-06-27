@@ -70,9 +70,9 @@ namespace Staat.Jobs.Checks
                     var incident = _monitor.CurrentIncident = new Incident()
                     {
                         Title = $"Possible disruption of {_service.Name}",
-                        Active = true,
+                        StartedAt = DateTime.UtcNow,
                         Service = _service,
-                        Description = $"Automated Detection: {failureReason}"
+                        Description = $"Automated Detection"
                     };
                     // Add message to incident
                     incident.Messages = new List<IncidentMessage>()
@@ -80,7 +80,7 @@ namespace Staat.Jobs.Checks
                         new()
                         {
                             Incident = incident,
-                            Message = $"Automated Detection: {failureReason}",
+                            Message = $"Automated Detection: ```{failureReason}```",
                             Status = status
                         }
                     };

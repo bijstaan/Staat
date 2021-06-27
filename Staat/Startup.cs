@@ -35,6 +35,7 @@ using Staat.Data;
 using Staat.GraphQL.Mutations;
 using Staat.Services;
 using Staat.GraphQL.Queries;
+using Staat.GraphQL.Subscriptions;
 using Staat.Jobs;
 
 namespace Staat
@@ -110,6 +111,8 @@ namespace Staat
                 .AddTypeExtension<MaintenanceQuery>()
                 .AddMutationType(d => d.Name("Mutation"))
                 .AddTypeExtension<ServiceGroupMutation>()
+                .AddSubscriptionType(d => d.Name("Subscription"))
+                .AddTypeExtension<ServiceSubscription>()
                 .UseAutomaticPersistedQueryPipeline()
                 .AddInMemoryQueryStorage();
 
@@ -245,7 +248,10 @@ namespace Staat
         
         private void ConfigureMssqlDatabase(DbContextOptionsBuilder options)
         {
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), builder =>
+            {
+                builder.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
+            });
             options.UseMemoryCache(new MemoryCache(new MemoryCacheOptions()));
         }
     }

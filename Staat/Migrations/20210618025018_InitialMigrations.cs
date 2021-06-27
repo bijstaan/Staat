@@ -122,10 +122,12 @@ namespace Staat.Migrations
                             Id = table.Column<int>(type: "INTEGER", nullable: false)
                                 .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                             Title = table.Column<string>(type: "VARCHAR(100)", maxLength: 100, nullable: false),
-                            Description = table.Column<string>(type: "TEXT", nullable: false),
+                            Description = table.Column<string>(type: "TEXT", nullable: true),
+                            DescriptionHtml = table.Column<string>(type: "TEXT", nullable: true),
                             AuthorId = table.Column<int>(type: "INTEGER", nullable: false),
-                            Active = table.Column<bool>(type: "INTEGER", nullable: false),
                             ServiceId = table.Column<int>(type: "INTEGER", nullable: false),
+                            StartedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                            EndedAt = table.Column<DateTime>(type: "DATETIME", nullable: true),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
                             UpdatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false)
                         },
@@ -152,6 +154,7 @@ namespace Staat.Migrations
                             Id = table.Column<int>(type: "INTEGER", nullable: false)
                                 .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                             Message = table.Column<string>(type: "TEXT", nullable: false),
+                            MessageHtml = table.Column<string>(type: "TEXT", nullable: false),
                             AuthorId = table.Column<int>(type: "INTEGER", nullable: false),
                             StatusId = table.Column<int>(type: "INTEGER", nullable: true),
                             IncidentId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -348,10 +351,12 @@ namespace Staat.Migrations
                             Id = table.Column<int>(type: "INTEGER", nullable: false)
                                 .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                             Title = table.Column<string>(type: "NVARCHAR(100)", maxLength: 100, nullable: false),
-                            Description = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false),
+                            Description = table.Column<string>(type: "NVARCHAR(MAX)", nullable: true),
+                            DescriptionHtml = table.Column<string>(type: "NVARCHAR(MAX)", nullable: true),
                             AuthorId = table.Column<int>(type: "INTEGER", nullable: false),
-                            Active = table.Column<bool>(type: "INTEGER", nullable: false),
                             ServiceId = table.Column<int>(type: "INTEGER", nullable: false),
+                            StartedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                            EndedAt = table.Column<DateTime>(type: "DATETIME", nullable: true),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
                             UpdatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false)
                         },
@@ -378,6 +383,7 @@ namespace Staat.Migrations
                             Id = table.Column<int>(type: "INTEGER", nullable: false)
                                 .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                             Message = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false),
+                            MessageHtml = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false),
                             AuthorId = table.Column<int>(type: "INTEGER", nullable: false),
                             StatusId = table.Column<int>(type: "INTEGER", nullable: true),
                             IncidentId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -574,10 +580,12 @@ namespace Staat.Migrations
                             Id = table.Column<int>(type: "INTEGER", nullable: false)
                                 .Annotation("MySQL:AutoIncrement", true),
                             Title = table.Column<string>(type: "VARCHAR(100)", maxLength: 100, nullable: false),
-                            Description = table.Column<string>(type: "TEXT", nullable: false),
+                            Description = table.Column<string>(type: "TEXT", nullable: true),
+                            DescriptionHtml = table.Column<string>(type: "TEXT", nullable: true),
                             AuthorId = table.Column<int>(type: "INTEGER", nullable: false),
-                            Active = table.Column<bool>(type: "INTEGER", nullable: false),
                             ServiceId = table.Column<int>(type: "INTEGER", nullable: false),
+                            StartedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                            EndedAt = table.Column<DateTime>(type: "DATETIME", nullable: true),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
                             UpdatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false)
                         },
@@ -604,6 +612,7 @@ namespace Staat.Migrations
                             Id = table.Column<int>(type: "INTEGER", nullable: false)
                                 .Annotation("MySQL:AutoIncrement", true),
                             Message = table.Column<string>(type: "TEXT", nullable: false),
+                            MessageHtml = table.Column<string>(type: "TEXT", nullable: false),
                             AuthorId = table.Column<int>(type: "INTEGER", nullable: false),
                             StatusId = table.Column<int>(type: "INTEGER", nullable: true),
                             IncidentId = table.Column<int>(type: "INTEGER", nullable: false),
