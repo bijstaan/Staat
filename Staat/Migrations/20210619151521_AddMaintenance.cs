@@ -19,8 +19,8 @@ namespace Staat.Migrations
                                 .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                             Title = table.Column<string>(type: "varchar(100)", nullable: false),
                             Description = table.Column<string>(type: "TEXT", nullable: false),
-                            StartTime = table.Column<DateTime>(type: "DATETIME", nullable: false),
-                            EndTime = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                            StartedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                            EndedAt = table.Column<DateTime>(type: "DATETIME", nullable: true),
                             AuthorId = table.Column<int>(type: "int", nullable: false),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
                             UpdatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false)
@@ -98,8 +98,8 @@ namespace Staat.Migrations
                                 .Annotation("SqlServer:Identity", "1, 1"),
                             Title = table.Column<string>(type: "nvarchar(100)", nullable: false),
                             Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                            StartTime = table.Column<DateTime>(type: "DATETIME", nullable: false),
-                            EndTime = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                            StartedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                            EndedAt = table.Column<DateTime>(type: "DATETIME", nullable: true),
                             AuthorId = table.Column<int>(type: "int", nullable: false),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
                             UpdatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false)
@@ -177,8 +177,8 @@ namespace Staat.Migrations
                                 .Annotation("MySQL:AutoIncrement", true),
                             Title = table.Column<string>(type: "VARCHAR(100)", nullable: false),
                             Description = table.Column<string>(type: "TEXT", nullable: false),
-                            StartTime = table.Column<DateTime>(type: "DATETIME", nullable: false),
-                            EndTime = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                            StartedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                            EndedAt = table.Column<DateTime>(type: "DATETIME", nullable: true),
                             AuthorId = table.Column<int>(type: "int", nullable: false),
                             CreatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false),
                             UpdatedAt = table.Column<DateTime>(type: "DATETIME", nullable: false)

@@ -13,8 +13,8 @@ namespace Staat.Models
         [Required, MaxLength(100), StringLength(100)] public string Title { get; set; }
         [Required] public string Description { get; set; }
         [Required] public string DescriptionHtml { get; set; }
-        [Required] public DateTime StartTime { get; set; }
-        [Required] public DateTime EndTime { get; set; }
+        [Required] public DateTime StartedAt { get; set; }
+        [Required] public DateTime? EndedAt { get; set; }
 
         [UseFiltering, UseSorting] public ICollection<MaintenanceMessage> Messages { get; set; }
         [UseFiltering, UseSorting] public ICollection<Service> Services { get; set; }

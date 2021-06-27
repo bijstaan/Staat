@@ -17,11 +17,13 @@
  */
 
 #nullable enable
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Types;
+using Microsoft.EntityFrameworkCore;
 using Staat.Data;
 using Staat.Extensions;
 using Staat.GraphQL.Mutations.Inputs.ServiceGroup;
@@ -58,7 +60,7 @@ namespace Staat.GraphQL.Mutations
             if (serviceGroup is null)
             {
                 return new ServiceGroupBasePayload(
-                    new UserError("Service Group with id not found.", "SPEAKER_NOT_FOUND"));
+                    new UserError("Service Group with id not found.", "SERVICE_GROUP_NOT_FOUND"));
             }
 
             if (input.Name.HasValue)
@@ -73,9 +75,19 @@ namespace Staat.GraphQL.Mutations
 
             if (input.DefaultOpen.HasValue)
             {
-                serviceGroup.DefaultOpen = input.DefaultOpen.Value;
+                serviceGroup.DefaultOpen = (bool) input.DefaultOpen;
             }
             
+            await context.SaveChangesAsync(cancellationToken);
+            return new ServiceGroupBasePayload(serviceGroup);
+        }
+
+        [UseApplicationContext]
+        public async Task<ServiceGroupBasePayload> DeleteServiceGroup(DeleteServiceGroupInput input,
+            [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
+        {
+            ServiceGroup? serviceGroup = await context.ServiceGroup.FindAsync(input.ServiceGroupId);
+            context.Remove(serviceGroup);
             await context.SaveChangesAsync(cancellationToken);
             return new ServiceGroupBasePayload(serviceGroup);
         }

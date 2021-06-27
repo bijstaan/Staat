@@ -14,8 +14,8 @@ namespace Staat.Helpers
                 .UseEmphasisExtras()
                 .UseEmojiAndSmiley()
                 .UseAbbreviations()
-                .UseTaskLists()
-                .UseDiagrams()
+                .UseCustomContainers()
+                .UseReferralLinks("nofollow", "noreferrer")
                 .UseAdvancedExtensions()
                 .UsePrism()
                 .Build();

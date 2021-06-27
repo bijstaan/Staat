@@ -40,7 +40,7 @@ namespace Staat.Models
         
         [Required] public DateTime StartedAt { get; set; }
         
-        public DateTime EndedAt { get; set; }
+        public DateTime? EndedAt { get; set; }
         
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

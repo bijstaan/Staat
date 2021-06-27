@@ -111,6 +111,7 @@ namespace Staat
                 .AddTypeExtension<MaintenanceQuery>()
                 .AddMutationType(d => d.Name("Mutation"))
                 .AddTypeExtension<ServiceGroupMutation>()
+                .AddTypeExtension<IncidentMutation>()
                 .AddSubscriptionType(d => d.Name("Subscription"))
                 .AddTypeExtension<ServiceSubscription>()
                 .UseAutomaticPersistedQueryPipeline()
@@ -123,6 +124,8 @@ namespace Staat
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<DbContext, ApplicationDbContext>();
             
+            services.AddHttpContextAccessor();
+
             /*
              * Authentication Area
              */

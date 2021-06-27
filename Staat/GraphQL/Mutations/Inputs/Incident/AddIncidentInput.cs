@@ -16,14 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#nullable enable
+using System;
 using HotChocolate;
 
-namespace Staat.GraphQL.Mutations.Inputs.ServiceGroup
+namespace Staat.GraphQL.Mutations.Inputs.Incident
 {
-    public record UpdateServiceGroupInput(
-        int Id,
-        Optional<string?> Name,
-        Optional<string?> Description,
-        Optional<bool?> DefaultOpen);
+    public record AddIncidentInput(
+        string Title, 
+        Optional<string> Description, 
+        int ServiceId, 
+        DateTime StartedAt,
+        Optional<DateTime?> EndedAt);
 }

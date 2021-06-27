@@ -17,13 +17,26 @@
  */
 
 #nullable enable
-using HotChocolate;
+using System.Collections.Generic;
+using Staat.Helpers;
 
-namespace Staat.GraphQL.Mutations.Inputs.ServiceGroup
+namespace Staat.GraphQL.Mutations.Payloads.Incident
 {
-    public record UpdateServiceGroupInput(
-        int Id,
-        Optional<string?> Name,
-        Optional<string?> Description,
-        Optional<bool?> DefaultOpen);
+    public class IncidentBasePayload : Payload
+    {
+        public Models.Incident? Incident { get;}
+        public IncidentBasePayload(Models.Incident incident)
+        {
+            Incident = incident;
+        }
+        
+        public IncidentBasePayload(IReadOnlyList<UserError> errors)
+            : base(errors)
+        {
+        }
+
+        public IncidentBasePayload(UserError error) : base(new [] { error })
+        {
+        }
+    }
 }
