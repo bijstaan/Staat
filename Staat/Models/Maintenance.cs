@@ -12,6 +12,7 @@ namespace Staat.Models
         [Key] public int Id { get; set; }
         [Required, MaxLength(100), StringLength(100)] public string Title { get; set; }
         [Required] public string Description { get; set; }
+        [Required] public string DescriptionHtml { get; set; }
         [Required] public DateTime StartTime { get; set; }
         [Required] public DateTime EndTime { get; set; }
 

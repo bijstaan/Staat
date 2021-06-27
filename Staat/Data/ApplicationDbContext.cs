@@ -111,6 +111,26 @@ namespace Staat.Data
                 if (entity != null) entity.MessageHtml = MarkdownHelper.ToHtml(entity.Message);
             }
 
+            var maintenanceEntities = this.ChangeTracker.Entries()
+                .Where(x => (x.State == EntityState.Modified || x.State == EntityState.Added) && x.Entity != null &&
+                            x.Entity as Maintenance != null)
+                .Select(x => x.Entity as Maintenance);
+
+            foreach (var entity in maintenanceEntities)
+            {
+                if (entity != null) entity.DescriptionHtml = MarkdownHelper.ToHtml(entity.Description);
+            }
+            
+            var maintenanceMessageEntities = this.ChangeTracker.Entries()
+                .Where(x => (x.State == EntityState.Modified || x.State == EntityState.Added) && x.Entity != null &&
+                            x.Entity as MaintenanceMessage != null)
+                .Select(x => x.Entity as MaintenanceMessage);
+
+            foreach (var entity in maintenanceMessageEntities)
+            {
+                if (entity != null) entity.MessageHtml = MarkdownHelper.ToHtml(entity.Message);
+            }
+
             foreach (var newEntity in newEntities)
             {
                 if (newEntity != null)

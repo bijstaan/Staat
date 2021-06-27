@@ -129,6 +129,10 @@ namespace Staat.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+                    
+                    b.Property<string>("DescriptionHtml")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
@@ -167,6 +171,10 @@ namespace Staat.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+                    
+                    b.Property<string>("MessageHtml")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
