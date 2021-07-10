@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#nullable enable
 using System;
 using System.Linq;
 using System.Security.Claims;
@@ -61,9 +62,17 @@ namespace Staat.GraphQL.Mutations
                 Service = await context.Service.FindAsync(input.ServiceId),
                 StartedAt = input.StartedAt,
                 EndedAt = endedAt,
-                Author = context.User.First(x => x.Id == Int32.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value))
+                Author = context.User.First(x => x.Id == Int32.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)!.Value))
             };
             await context.Incident.AddAsync(incident, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
+            return new IncidentBasePayload(incident);
+        }
+
+        public async Task<IncidentBasePayload> UpdateIncidentAsync(UpdateIncidentInput input,
+            [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
+        {
+            Incident? incident = await context.Incident.FindAsync(input.Id);
             await context.SaveChangesAsync(cancellationToken);
             return new IncidentBasePayload(incident);
         }
