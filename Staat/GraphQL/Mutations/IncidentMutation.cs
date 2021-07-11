@@ -73,6 +73,37 @@ namespace Staat.GraphQL.Mutations
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
             Incident? incident = await context.Incident.FindAsync(input.Id);
+            if (incident is null)
+            {
+                return new IncidentBasePayload(
+                    new UserError("Service Group with id not found.", "INCIDENT_NOT_FOUND"));
+            }
+            
+            if (input.Title.HasValue)
+            {
+                incident.Title = input.Title;
+            }
+            
+            if (input.Description.HasValue)
+            {
+                incident.Description = input.Description;
+            }
+            
+            if (input.ServiceId.HasValue)
+            {
+                incident.Service = await context.Service.FindAsync(input.ServiceId);
+            }
+            
+            if (input.StartedAt.HasValue)
+            {
+                incident.StartedAt = input.StartedAt;
+            }
+            
+            if (input.EndedAt.HasValue)
+            {
+                incident.EndedAt = input.EndedAt;
+            }
+            
             await context.SaveChangesAsync(cancellationToken);
             return new IncidentBasePayload(incident);
         }
