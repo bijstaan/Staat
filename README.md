@@ -22,6 +22,13 @@ An open-source .NET Core C# Status Page and service monitoring tool. Includes:
 ## Docker
 
 ## Regular Install
+### Storage Paths
+There are 4 primary storage types you can use:
+- Azure Blobs (`azure.blob://account=account_name;key=secret_value`) or (`azure.blob://development=true`)
+- AWS S3 (`aws.s3://keyId=...;key=....;bucket=...;region=....;`)
+- Google Cloud Storage (`google.storage://bucket=....;cred=....;`)
+- Local Disk (`disk://path=C:\\Path\\To\\Directory`)
+
 
 ## Logging In
 The default credentials are:

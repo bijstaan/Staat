@@ -40,6 +40,8 @@ namespace Staat.Models
         
         [Required] public DateTime StartedAt { get; set; }
         
+        [UseFiltering, UseSorting] public ICollection<Models.File> Files { get; set; }
+        
         public DateTime? EndedAt { get; set; }
         
         public DateTime CreatedAt { get; set; }

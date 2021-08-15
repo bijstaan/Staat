@@ -37,17 +37,19 @@ using Staat.Services;
 using Staat.GraphQL.Queries;
 using Staat.GraphQL.Subscriptions;
 using Staat.Jobs;
+using Storage.Net;
+using Storage.Net.Blobs;
 
 namespace Staat
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -84,7 +86,7 @@ namespace Staat
              */
             services.AddMemoryCache();
             services.AddSha256DocumentHashProvider(HashFormat.Hex);
-            
+
             /*
              * Coravel Section
              */
@@ -122,6 +124,7 @@ namespace Staat
              */
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IFileService, FileService>();
             services.AddScoped<DbContext, ApplicationDbContext>();
             
             services.AddHttpContextAccessor();

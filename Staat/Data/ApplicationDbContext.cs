@@ -29,16 +29,17 @@ namespace Staat.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<Service> Service { get; set; }
-        public DbSet<ServiceGroup> ServiceGroup { get; set; }
-        public DbSet<Status> Status { get; set; }
+        public DbSet<File> File { get; set; }
         public DbSet<Incident> Incident { get; set; }
         public DbSet<IncidentMessage> IncidentMessage { get; set; }
         public DbSet<Maintenance> Maintenance { get; set; }
         public DbSet<MaintenanceMessage> MaintenanceMessage { get; set; }
         public DbSet<Models.Monitor> Monitor { get; set; }
         public DbSet<MonitorData> MonitorData { get; set; }
+        public DbSet<Service> Service { get; set; }
+        public DbSet<ServiceGroup> ServiceGroup { get; set; }
         public DbSet<Settings> Settings { get; set; }
+        public DbSet<Status> Status { get; set; }
         public DbSet<User> User { get; set; }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
