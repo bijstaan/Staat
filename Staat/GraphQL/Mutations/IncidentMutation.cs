@@ -18,14 +18,18 @@
 
 #nullable enable
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentEmail.Core;
 using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Types;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Staat.Data;
 using Staat.Extensions;
 using Staat.GraphQL.Mutations.Inputs.Incident;
@@ -46,7 +50,7 @@ namespace Staat.GraphQL.Mutations
         }
         [UseApplicationContext]
         public async Task<IncidentBasePayload> AddIncidentAsync(AddIncidentInput input,
-            [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
+            [ScopedService] ApplicationDbContext context, [FromServices] IFluentEmail email, CancellationToken cancellationToken)
         {
             DateTime? endedAt = null;
             if (input.EndedAt.HasValue)
@@ -66,6 +70,22 @@ namespace Staat.GraphQL.Mutations
             };
             await context.Incident.AddAsync(incident, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
+
+            var users = context.User.AsQueryable();
+            var template = await context.Settings.Where(x => x.Key == "backend.email.template.incident").FirstAsync(cancellationToken: cancellationToken);
+
+            foreach (var user in users)
+            {
+                await email.To(user.Email).UsingTemplate(template.Value, new
+                {
+                    Title = incident.Title, 
+                    Description = incident.DescriptionHtml, 
+                    ServiceName = incident.Service.Name, 
+                    StartedAt = incident.StartedAt.ToString(CultureInfo.InvariantCulture), 
+                    EndedAt = incident.EndedAt?.ToString(CultureInfo.InvariantCulture)
+                }).SendAsync();
+            }
+
             return new IncidentBasePayload(incident);
         }
 
@@ -76,7 +96,7 @@ namespace Staat.GraphQL.Mutations
             if (incident is null)
             {
                 return new IncidentBasePayload(
-                    new UserError("Service Group with id not found.", "INCIDENT_NOT_FOUND"));
+                    new UserError("Incident with that id not found.", "INCIDENT_NOT_FOUND"));
             }
             
             if (input.Title.HasValue)

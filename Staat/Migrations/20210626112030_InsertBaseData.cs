@@ -154,23 +154,53 @@ namespace Staat.Migrations
                 values: new object[,]
                 {
                     {
-                        "status.success",
+                        "backend.status.success",
                         "1",
                         DateTime.UtcNow.ToString(),
                         DateTime.UtcNow.ToString(),
                     },
                     {
-                        "status.warning",
+                        "backend.status.warning",
                         "2",
                         DateTime.UtcNow.ToString(),
                         DateTime.UtcNow.ToString()
                     },
                     {
-                        "status.error",
+                        "backend.status.error",
                         "3",
                         DateTime.UtcNow.ToString(),
                         DateTime.UtcNow.ToString(),
                     },
+                    {
+                        "backend.email.template.maintenance",
+                        "This is some temp text",
+                        DateTime.UtcNow.ToString(),
+                        DateTime.UtcNow.ToString()                    
+                    },
+                    {
+                        "backend.email.template.maintenancemessage",
+                        "This is some temp text",
+                        DateTime.UtcNow.ToString(),
+                        DateTime.UtcNow.ToString()                    
+                    },
+                    {
+                        "backend.email.template.incident",
+                        "This is some temp text",
+                        DateTime.UtcNow.ToString(),
+                        DateTime.UtcNow.ToString()                    
+                    },
+                    {
+                        "backend.email.template.incidentmessage",
+                        "This is some temp text",
+                        DateTime.UtcNow.ToString(),
+                        DateTime.UtcNow.ToString()                    
+                    },
+                    {
+                        "backend.monitor.cleanup",
+                        "30",
+                        DateTime.UtcNow.ToString(),
+                        DateTime.UtcNow.ToString()
+                    }
                 });
         }
 

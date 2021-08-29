@@ -46,7 +46,7 @@ namespace Staat.Jobs.Checks
             HttpWebRequest request = WebRequest.Create(_service.Url) as HttpWebRequest;
             if (request != null)
                 request.UserAgent =
-                    "Mozilla/5.0 (compatible: Staat/1.0: +https://github.com/tankerkiller125/Staat)";
+                    "Mozilla/5.0 (compatible: Staat/1.0: +https://github.com/bijstaan/Staat)";
             bool serviceAvailable;
             string failureReason = "";
             try
@@ -65,7 +65,7 @@ namespace Staat.Jobs.Checks
                 if (_monitor.CurrentIncident == null)
                 {
                     // Get default warning status
-                    var status = _context.Status.First(x => x.Id.Equals(_context.Settings.First(s => s.Key.Equals("status.warning"))));
+                    var status = _context.Status.First(x => x.Id.Equals(_context.Settings.First(s => s.Key.Equals("backend.status.warning"))));
                     // Set new incident
                     var incident = _monitor.CurrentIncident = new Incident()
                     {
@@ -90,7 +90,7 @@ namespace Staat.Jobs.Checks
                     // If service is OK now clear previous incidents
                     if (_monitor.CurrentIncident != null)
                     {
-                        _monitor.Service.Status = _context.Status.First(x => x.Id.Equals(_context.Settings.First(s => s.Key.Equals("status.warning"))));
+                        _monitor.Service.Status = _context.Status.First(x => x.Id.Equals(_context.Settings.First(s => s.Key.Equals("backend.status.success"))));
                         _monitor.CurrentIncident = null;
                     }
                 }

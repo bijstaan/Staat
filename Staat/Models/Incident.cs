@@ -39,10 +39,10 @@ namespace Staat.Models
         [Required, Authorize] public User Author { get; set; }
         
         [Required] public DateTime StartedAt { get; set; }
+
+        public DateTime? EndedAt { get; set; }
         
         [UseFiltering, UseSorting] public ICollection<Models.File> Files { get; set; }
-        
-        public DateTime? EndedAt { get; set; }
         
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

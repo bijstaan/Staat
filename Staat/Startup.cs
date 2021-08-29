@@ -80,7 +80,14 @@ namespace Staat
                 throw new Exception(e.Message);
             }
 
-
+            /*
+             * Email configuration
+             */
+            var emailConfig = Configuration.GetSection("Email");
+            services.AddFluentEmail(emailConfig["Address"], emailConfig["Name"])
+                .AddLiquidRenderer()
+                .AddSmtpSender(emailConfig["Host"], int.Parse(emailConfig["Port"]), emailConfig["Username"], emailConfig["Password"]);
+            
             /*
              * Cache Section
              */
@@ -104,16 +111,22 @@ namespace Staat
                 .AddSorting()
                 .AddInMemorySubscriptions()
                 .AddQueryType(d => d.Name("Query"))
+                .AddTypeExtension<IncidentQuery>()
+                .AddTypeExtension<MaintenanceQuery>()
+                .AddTypeExtension<MonitorQuery>()
                 .AddTypeExtension<ServiceGroupQuery>()
                 .AddTypeExtension<ServiceQuery>()
-                .AddTypeExtension<IncidentQuery>()
                 .AddTypeExtension<SettingsQuery>()
                 .AddTypeExtension<UserQuery>()
-                .AddTypeExtension<MonitorQuery>()
-                .AddTypeExtension<MaintenanceQuery>()
                 .AddMutationType(d => d.Name("Mutation"))
-                .AddTypeExtension<ServiceGroupMutation>()
                 .AddTypeExtension<IncidentMutation>()
+                //.AddTypeExtension<IncidentMessageMutation>()
+                //.AddTypeExtension<MaintenanceMutation>()
+                //.AddTypeExtension<MaintenanceMessageMutation>()
+                //.AddTypeExtension<MonitorMutation>()
+                .AddTypeExtension<ServiceGroupMutation>()
+                //.AddTypeExtension<ServiceMutation>()
+                .AddTypeExtension<SettingMutation>()
                 .AddSubscriptionType(d => d.Name("Subscription"))
                 .AddTypeExtension<ServiceSubscription>()
                 .UseAutomaticPersistedQueryPipeline()

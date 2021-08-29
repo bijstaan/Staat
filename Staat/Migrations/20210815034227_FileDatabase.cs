@@ -10,8 +10,137 @@ namespace Staat.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_Service_ServiceGroup_GroupId",
                 table: "Service");
+            switch (migrationBuilder.ActiveProvider)
+            {
+                case "Npgsql.EntityFrameworkCore.PostgreSQL":
+                    migrationBuilder.DropForeignKey(
+                        name: "FK_Service_ServiceGroup_GroupId",
+                        table: "Service");
+                    break;
+                case "Microsoft.EntityFrameworkCore.SqlServer":
+                    migrationBuilder.CreateTable(
+                        name: "File",
+                        columns: table => new
+                        {
+                            Id = table.Column<int>(type: "int", nullable: false)
+                                .Annotation("SqlServer:Identity", "1, 1"), 
+                            Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                            Namespace = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                            Hash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                            MimeType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                            CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                            UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        },
+                        constraints: table =>
+                        {
+                            table.PrimaryKey("PK_File", x => x.Id);
+                        });
 
-            migrationBuilder.AlterColumn<string>(
+                    migrationBuilder.CreateTable(
+                        name: "FileIncident",
+                        columns: table => new
+                        {   
+                            FilesId = table.Column<int>(type: "int", nullable: false),
+                            IncidentsId = table.Column<int>(type: "int", nullable: false)
+                        },
+                        constraints: table =>
+                        {
+                            table.PrimaryKey("PK_FileIncident", x => new { x.FilesId, x.IncidentsId });
+                            table.ForeignKey(
+                                name: "FK_FileIncident_File_FilesId",
+                                column: x => x.FilesId,
+                                principalTable: "File",
+                                principalColumn: "Id",
+                                onDelete: ReferentialAction.Cascade);
+                            table.ForeignKey(
+                                name: "FK_FileIncident_Incident_IncidentsId",
+                                column: x => x.IncidentsId,
+                                principalTable: "Incident",
+                                principalColumn: "Id",
+                                onDelete: ReferentialAction.Cascade);
+                        });
+
+                    migrationBuilder.CreateTable(
+                        name: "FileIncidentMessage",
+                        columns: table => new
+                        {
+                            AttachmentsId = table.Column<int>(type: "int", nullable: false),
+                            IncidentMessagesId = table.Column<int>(type: "int", nullable: false)
+                        },
+                        constraints: table =>
+                        {
+                            table.PrimaryKey("PK_FileIncidentMessage", x => new { x.AttachmentsId, x.IncidentMessagesId });
+                            table.ForeignKey(
+                                name: "FK_FileIncidentMessage_File_AttachmentsId",
+                                column: x => x.AttachmentsId,
+                                principalTable: "File",
+                                principalColumn: "Id",
+                                onDelete: ReferentialAction.Cascade);
+                            table.ForeignKey(
+                                name: "FK_FileIncidentMessage_IncidentMessage_IncidentMessagesId",
+                                column: x => x.IncidentMessagesId,
+                                principalTable: "IncidentMessage",
+                                principalColumn: "Id",
+                                onDelete: ReferentialAction.Cascade);
+                        });
+
+                    migrationBuilder.CreateTable(
+                        name: "FileMaintenance",
+                        columns: table => new
+                        { 
+                            AttachmentsId = table.Column<int>(type: "int", nullable: false),
+                            MaintenancesId = table.Column<int>(type: "int", nullable: false)
+                        },
+                        constraints: table =>
+                        {
+                            table.PrimaryKey("PK_FileMaintenance", x => new { x.AttachmentsId, x.MaintenancesId });
+                            table.ForeignKey(
+                                name: "FK_FileMaintenance_File_AttachmentsId",
+                                column: x => x.AttachmentsId,
+                                principalTable: "File",
+                                principalColumn: "Id",
+                                onDelete: ReferentialAction.Cascade);
+                            table.ForeignKey(
+                                name: "FK_FileMaintenance_Maintenance_MaintenancesId",
+                                column: x => x.MaintenancesId,
+                                principalTable: "Maintenance",
+                                principalColumn: "Id",
+                                onDelete: ReferentialAction.Cascade);
+                        });
+
+                    migrationBuilder.CreateTable(
+                        name: "FileMaintenanceMessage",
+                        columns: table => new
+                        {
+                            AttachmentsId = table.Column<int>(type: "int", nullable: false),
+                            MaintenanceMessagesId = table.Column<int>(type: "int", nullable: false)
+                        },
+                        constraints: table =>
+                        {
+                            table.PrimaryKey("PK_FileMaintenanceMessage", x => new { x.AttachmentsId, x.MaintenanceMessagesId });
+                            table.ForeignKey(
+                                name: "FK_FileMaintenanceMessage_File_AttachmentsId",
+                                column: x => x.AttachmentsId,
+                                principalTable: "File",
+                                principalColumn: "Id",
+                                onDelete: ReferentialAction.Cascade);
+                            table.ForeignKey(
+                                name: "FK_FileMaintenanceMessage_MaintenanceMessage_MaintenanceMessagesId",
+                                column: x => x.MaintenanceMessagesId,
+                                principalTable: "MaintenanceMessage",
+                                principalColumn: "Id",
+                                onDelete: ReferentialAction.Cascade);
+                        });
+                    
+                    break;
+                case "Pomelo.EntityFrameworkCore.MySQL":
+                    migrationBuilder.DropForeignKey(
+                        name: "FK_Service_ServiceGroup_GroupId",
+                        table: "Service");
+                    break;
+            }
+
+            /*migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "Status",
                 type: "nvarchar(100)",
@@ -132,121 +261,7 @@ namespace Staat.Migrations
                 type: "nvarchar(max)",
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
-            migrationBuilder.CreateTable(
-                name: "File",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Namespace = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Hash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MimeType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_File", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FileIncident",
-                columns: table => new
-                {
-                    FilesId = table.Column<int>(type: "int", nullable: false),
-                    IncidentsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FileIncident", x => new { x.FilesId, x.IncidentsId });
-                    table.ForeignKey(
-                        name: "FK_FileIncident_File_FilesId",
-                        column: x => x.FilesId,
-                        principalTable: "File",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FileIncident_Incident_IncidentsId",
-                        column: x => x.IncidentsId,
-                        principalTable: "Incident",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FileIncidentMessage",
-                columns: table => new
-                {
-                    AttachmentsId = table.Column<int>(type: "int", nullable: false),
-                    IncidentMessagesId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FileIncidentMessage", x => new { x.AttachmentsId, x.IncidentMessagesId });
-                    table.ForeignKey(
-                        name: "FK_FileIncidentMessage_File_AttachmentsId",
-                        column: x => x.AttachmentsId,
-                        principalTable: "File",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FileIncidentMessage_IncidentMessage_IncidentMessagesId",
-                        column: x => x.IncidentMessagesId,
-                        principalTable: "IncidentMessage",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FileMaintenance",
-                columns: table => new
-                {
-                    AttachmentsId = table.Column<int>(type: "int", nullable: false),
-                    MaintenancesId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FileMaintenance", x => new { x.AttachmentsId, x.MaintenancesId });
-                    table.ForeignKey(
-                        name: "FK_FileMaintenance_File_AttachmentsId",
-                        column: x => x.AttachmentsId,
-                        principalTable: "File",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FileMaintenance_Maintenance_MaintenancesId",
-                        column: x => x.MaintenancesId,
-                        principalTable: "Maintenance",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FileMaintenanceMessage",
-                columns: table => new
-                {
-                    AttachmentsId = table.Column<int>(type: "int", nullable: false),
-                    MaintenanceMessagesId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FileMaintenanceMessage", x => new { x.AttachmentsId, x.MaintenanceMessagesId });
-                    table.ForeignKey(
-                        name: "FK_FileMaintenanceMessage_File_AttachmentsId",
-                        column: x => x.AttachmentsId,
-                        principalTable: "File",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FileMaintenanceMessage_MaintenanceMessage_MaintenanceMessagesId",
-                        column: x => x.MaintenanceMessagesId,
-                        principalTable: "MaintenanceMessage",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                oldType: "nvarchar(max)");*/
 
             migrationBuilder.CreateIndex(
                 name: "IX_FileIncident_IncidentsId",
@@ -307,7 +322,7 @@ namespace Staat.Migrations
             migrationBuilder.DropTable(
                 name: "Maintenance");
 
-            migrationBuilder.AlterColumn<string>(
+            /*migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "Status",
                 type: "nvarchar(60)",
@@ -426,7 +441,7 @@ namespace Staat.Migrations
                 defaultValue: "",
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)",
-                oldNullable: true);
+                oldNullable: true);*/
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Service_ServiceGroup_GroupId",
