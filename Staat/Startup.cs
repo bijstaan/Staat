@@ -86,8 +86,9 @@ namespace Staat
             var emailConfig = Configuration.GetSection("Email");
             services.AddFluentEmail(emailConfig["Address"], emailConfig["Name"])
                 .AddLiquidRenderer()
-                .AddSmtpSender(emailConfig["Host"], int.Parse(emailConfig["Port"]), emailConfig["Username"], emailConfig["Password"]);
-            
+                .AddSmtpSender(emailConfig["Host"], int.Parse(emailConfig["Port"]), emailConfig["Username"],
+                    emailConfig["Password"]);
+
             /*
              * Cache Section
              */

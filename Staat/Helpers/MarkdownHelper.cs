@@ -8,17 +8,24 @@ namespace Staat.Helpers
         public static string ToHtml(string markdown)
         {
             var pipeline = new MarkdownPipelineBuilder()
-                .UseAutoLinks()
-                .UsePipeTables()
-                .UseMediaLinks()
-                .UseEmphasisExtras()
-                .UseEmojiAndSmiley()
-                .UseAbbreviations()
-                .UseCustomContainers()
-                .UseReferralLinks("nofollow", "noreferrer")
-                .UseAdvancedExtensions()
-                .UsePrism()
-                .Build();
+                    .UseAbbreviations()
+                    .UseAutoLinks()
+                    .UseCustomContainers()
+                    .UseDefinitionLists()
+                    .UseDiagrams()
+                    .UseEmphasisExtras()
+                    .UseEmojiAndSmiley()
+                    .UseFootnotes()
+                    .UseGridTables()
+                    .UseListExtras()
+                    .UseMathematics()
+                    .UseMediaLinks()
+                    .UsePipeTables()
+                    .UsePrism()
+                    .UseReferralLinks("nofollow", "noreferrer")
+                    .UseTaskLists()
+                    .UseGenericAttributes() // Must be last
+                    .Build();
             return Markdown.ToHtml(markdown, pipeline);
         }
     }
