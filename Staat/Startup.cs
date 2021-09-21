@@ -31,6 +31,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
+using Sentry.AspNetCore;
 using Staat.Data;
 using Staat.GraphQL.Mutations;
 using Staat.Services;
@@ -205,6 +206,8 @@ namespace Staat
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseSentryTracing();
             
             app.UseDefaultFiles();
             app.UseStaticFiles();

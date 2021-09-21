@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#nullable enable
+using System.Collections.Generic;
 using Staat.Helpers;
 
 namespace Staat.GraphQL.Mutations.Payloads.Setting
