@@ -36,6 +36,7 @@ using Staat.GraphQL.Mutations.Inputs.Incident;
 using Staat.GraphQL.Mutations.Payloads.Incident;
 using Staat.Helpers;
 using Staat.Models;
+using Z.EntityFramework.Plus;
 
 namespace Staat.GraphQL.Mutations
 {
@@ -63,28 +64,29 @@ namespace Staat.GraphQL.Mutations
                 Title = input.Title,
                 Description = input.Description,
                 DescriptionHtml = MarkdownHelper.ToHtml(input.Description),
-                Service = await context.Service.FindAsync(input.ServiceId),
+                Service = await context.Service.FirstAsync(x => x.Id == input.ServiceId, cancellationToken: cancellationToken),
                 StartedAt = input.StartedAt,
                 EndedAt = endedAt,
-                Author = context.User.First(x => x.Id == Int32.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)!.Value))
+                Author = await context.User.FirstAsync(x => x.Id == Int32.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)!.Value), cancellationToken: cancellationToken)
             };
             await context.Incident.AddAsync(incident, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
 
-            var users = context.User.AsQueryable();
-            var template = await context.Settings.Where(x => x.Key == "backend.email.template.incident").FirstAsync(cancellationToken: cancellationToken);
+            /*var subscribers = context.Subscriber.AsQueryable();
+            var template = await context.Settings.Where(x => x.Key == "backend.email.template.incident").FirstAsync(cancellationToken);
 
-            foreach (var user in users)
+            foreach (var subscriber in subscribers)
             {
-                await email.To(user.Email).UsingTemplate(template.Value, new
+                await email.To(subscriber.Email).UsingTemplate(template.Value, new
                 {
                     Title = incident.Title, 
                     Description = incident.DescriptionHtml, 
                     ServiceName = incident.Service.Name, 
                     StartedAt = incident.StartedAt.ToString(CultureInfo.InvariantCulture), 
-                    EndedAt = incident.EndedAt?.ToString(CultureInfo.InvariantCulture)
+                    EndedAt = incident.EndedAt?.ToString(CultureInfo.InvariantCulture),
+                    Attachments = incident.Files
                 }).SendAsync();
-            }
+            }*/
 
             return new IncidentBasePayload(incident);
         }
@@ -92,7 +94,7 @@ namespace Staat.GraphQL.Mutations
         public async Task<IncidentBasePayload> UpdateIncidentAsync(UpdateIncidentInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
-            Incident? incident = await context.Incident.FindAsync(input.Id);
+            Incident? incident = await context.Incident.FirstAsync(x => x.Id == input.Id, cancellationToken: cancellationToken);
             if (incident is null)
             {
                 return new IncidentBasePayload(
@@ -111,7 +113,7 @@ namespace Staat.GraphQL.Mutations
             
             if (input.ServiceId.HasValue)
             {
-                incident.Service = await context.Service.FindAsync(input.ServiceId);
+                incident.Service = await context.Service.FirstAsync(x => x.Id == input.ServiceId, cancellationToken: cancellationToken);
             }
             
             if (input.StartedAt.HasValue)

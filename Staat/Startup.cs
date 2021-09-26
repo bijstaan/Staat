@@ -20,6 +20,8 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using Coravel;
+using FluentEmail.MailKitSmtp;
+using HotChocolate.Execution.Options;
 using HotChocolate.Language;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,8 +40,6 @@ using Staat.Services;
 using Staat.GraphQL.Queries;
 using Staat.GraphQL.Subscriptions;
 using Staat.Jobs;
-using Storage.Net;
-using Storage.Net.Blobs;
 
 namespace Staat
 {
@@ -86,9 +86,14 @@ namespace Staat
              */
             var emailConfig = Configuration.GetSection("Email");
             services.AddFluentEmail(emailConfig["Address"], emailConfig["Name"])
-                .AddLiquidRenderer()
-                .AddSmtpSender(emailConfig["Host"], int.Parse(emailConfig["Port"]), emailConfig["Username"],
-                    emailConfig["Password"]);
+                .AddLiquidRenderer().AddMailKitSender(new SmtpClientOptions
+                {
+                    Server = emailConfig["Host"],
+                    Port = int.Parse(emailConfig["Port"]),
+                    User = emailConfig["Username"],
+                    Password = emailConfig["Password"],
+                    UseSsl = bool.Parse(emailConfig["UseSsl"]),
+                });
 
             /*
              * Cache Section
@@ -112,6 +117,7 @@ namespace Staat
                 .AddFiltering()
                 .AddSorting()
                 .AddInMemorySubscriptions()
+                .AddApolloTracing()
                 .AddQueryType(d => d.Name("Query"))
                 .AddTypeExtension<IncidentQuery>()
                 .AddTypeExtension<MaintenanceQuery>()
@@ -122,7 +128,7 @@ namespace Staat
                 .AddTypeExtension<UserQuery>()
                 .AddMutationType(d => d.Name("Mutation"))
                 .AddTypeExtension<IncidentMutation>()
-                //.AddTypeExtension<IncidentMessageMutation>()
+                .AddTypeExtension<IncidentMessageMutation>()
                 //.AddTypeExtension<MaintenanceMutation>()
                 //.AddTypeExtension<MaintenanceMessageMutation>()
                 //.AddTypeExtension<MonitorMutation>()

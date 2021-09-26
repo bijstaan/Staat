@@ -40,6 +40,8 @@ namespace Staat.Data
         public DbSet<ServiceGroup> ServiceGroup { get; set; }
         public DbSet<Settings> Settings { get; set; }
         public DbSet<Status> Status { get; set; }
+        
+        public DbSet<Subscriber> Subscriber { get; set; }
         public DbSet<User> User { get; set; }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
@@ -93,44 +95,6 @@ namespace Staat.Data
                          x.Entity as ITimeStampedModel != null
                 )
                 .Select(x => x.Entity as ITimeStampedModel);
-
-            var incidentEntities = this.ChangeTracker.Entries()
-                .Where(x => (x.State == EntityState.Modified || x.State == EntityState.Added) && x.Entity != null && x.Entity as Incident != null)
-                .Select(x => x.Entity as Incident);
-
-            foreach (var entity in incidentEntities)
-            {
-                if (entity != null) entity.DescriptionHtml = MarkdownHelper.ToHtml(entity.Description);
-            }
-            
-            var incidentMessageEntities = this.ChangeTracker.Entries()
-                .Where(x => (x.State == EntityState.Modified || x.State == EntityState.Added) && x.Entity != null && x.Entity as IncidentMessage != null)
-                .Select(x => x.Entity as IncidentMessage);
-
-            foreach (var entity in incidentMessageEntities)
-            {
-                if (entity != null) entity.MessageHtml = MarkdownHelper.ToHtml(entity.Message);
-            }
-
-            var maintenanceEntities = this.ChangeTracker.Entries()
-                .Where(x => (x.State == EntityState.Modified || x.State == EntityState.Added) && x.Entity != null &&
-                            x.Entity as Maintenance != null)
-                .Select(x => x.Entity as Maintenance);
-
-            foreach (var entity in maintenanceEntities)
-            {
-                if (entity != null) entity.DescriptionHtml = MarkdownHelper.ToHtml(entity.Description);
-            }
-            
-            var maintenanceMessageEntities = this.ChangeTracker.Entries()
-                .Where(x => (x.State == EntityState.Modified || x.State == EntityState.Added) && x.Entity != null &&
-                            x.Entity as MaintenanceMessage != null)
-                .Select(x => x.Entity as MaintenanceMessage);
-
-            foreach (var entity in maintenanceMessageEntities)
-            {
-                if (entity != null) entity.MessageHtml = MarkdownHelper.ToHtml(entity.Message);
-            }
 
             foreach (var newEntity in newEntities)
             {
