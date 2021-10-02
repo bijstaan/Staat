@@ -15,6 +15,7 @@
         <PackageReference Include="FluentEmail.Liquid" Version="3.0.0" />
         <PackageReference Include="FluentEmail.MailKit" Version="3.0.0" />
         <PackageReference Include="FluentEmail.Smtp" Version="3.0.0" />
+        <PackageReference Include="GroupDocs.Metadata" Version="21.8.0" />
         <PackageReference Include="HotChocolate.AspNetCore" Version="11.3.7" />
         <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="11.3.7" />
         <PackageReference Include="HotChocolate.Data" Version="11.3.7" />

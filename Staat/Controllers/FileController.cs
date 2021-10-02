@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Staat.Data;
 using Staat.Services;
 using Storage.Net.Blobs;
+using GroupDocs.Metadata;
 
 namespace Staat.Controllers
 {
@@ -53,6 +54,11 @@ namespace Staat.Controllers
             {
                 using var hasher = SHA256.Create();
                 await using var stream = file.OpenReadStream();
+                using (var metadata = new Metadata(stream))
+                {
+                    metadata.Sanitize();
+                    metadata.Save(stream);
+                }
                 var hash = Convert.ToBase64String(await hasher.ComputeHashAsync(stream));
                 stream.Seek(0, SeekOrigin.Begin);
                 await _fileService.BlobStorage().WriteAsync($"{pathNamespace}/{hash}", stream);
