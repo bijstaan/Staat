@@ -117,8 +117,7 @@ namespace Staat.GraphQL.Mutations
             {
                 incidentMessage.Attachments = await addAttachments(input.AttachedFilesIds.Value, context, cancellationToken);;
             }
-
-            await context.SaveChangesAsync(cancellationToken);
+            await context.BulkSaveChangesAsync(cancellationToken);
             return new IncidentMessageBasePayload(new IncidentMessage());
         }
 

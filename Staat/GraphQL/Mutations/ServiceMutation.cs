@@ -9,6 +9,7 @@ using Staat.Data;
 using Staat.Extensions;
 using Staat.GraphQL.Mutations.Inputs.Service;
 using Staat.GraphQL.Mutations.Payloads.Service;
+using Staat.Helpers;
 using Staat.Models;
 using Z.EntityFramework.Plus;
 
@@ -38,8 +39,31 @@ namespace Staat.GraphQL.Mutations
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
             var service = await context.Service.FirstAsync(x => x.Id == input.ServiceId, cancellationToken: cancellationToken);
+            if (service is null)
+            {
+                return new ServiceBasePayload(
+                    new UserError("Service with that id not found.", "SERVICE_NOT_FOUND"));
+            }
+            if (input.Name.HasValue)
+            {
+                service.Name = input.Name;
+            }
+            
+            if (input.Description.HasValue)
+            {
+	            service.Description = input.Description; 
+            }
 
+            if (input.Url.HasValue)
+            {
+                service.Url = input.Url;
+            }
 
+            if (input.ParentId.HasValue)
+            {
+                service.Parent = await context.Service.FirstAsync(x => x.Id == input.ParentId, cancellationToken: cancellationToken);
+            }
+            
             await context.SaveChangesAsync(cancellationToken);
             
             return new ServiceBasePayload(service);
