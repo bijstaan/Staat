@@ -21,7 +21,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Coravel;
 using FluentEmail.MailKitSmtp;
-using HotChocolate.Execution.Options;
 using HotChocolate.Language;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -133,7 +132,7 @@ namespace Staat
                 //.AddTypeExtension<MaintenanceMessageMutation>()
                 //.AddTypeExtension<MonitorMutation>()
                 .AddTypeExtension<ServiceGroupMutation>()
-                //.AddTypeExtension<ServiceMutation>()
+                .AddTypeExtension<ServiceMutation>()
                 .AddTypeExtension<SettingMutation>()
                 .AddSubscriptionType(d => d.Name("Subscription"))
                 .AddTypeExtension<ServiceSubscription>()
@@ -233,9 +232,6 @@ namespace Staat
             
             app.UseSpa(spa =>
             {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
                 spa.Options.SourcePath = "WebApp";
 
                 if (env.IsDevelopment())
@@ -243,7 +239,7 @@ namespace Staat
                     // if you just prefer to proxy requests from client app, use proxy to SPA dev server instead,
                     // app should be already running before starting a .NET client:
                     // run npm process with client app
-                    spa.UseProxyToSpaDevelopmentServer($"http://localhost:8080"); // your Vue app port
+                    spa.UseProxyToSpaDevelopmentServer($"http://localhost:8080");
                 }
             });
             

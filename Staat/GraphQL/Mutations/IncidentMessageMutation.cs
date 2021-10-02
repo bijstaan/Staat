@@ -78,6 +78,7 @@ namespace Staat.GraphQL.Mutations
             return new IncidentMessageBasePayload(incidentMessage);
         }
 
+        [UseApplicationContext]
         public async Task<IncidentMessageBasePayload> UpdateIncidentMessage(UpdateIncidentMessageInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
@@ -121,6 +122,7 @@ namespace Staat.GraphQL.Mutations
             return new IncidentMessageBasePayload(new IncidentMessage());
         }
 
+        [UseApplicationContext]
         public async Task<IncidentMessageBasePayload> DeleteIncidentMessage(DeleteIncidentMessageInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
