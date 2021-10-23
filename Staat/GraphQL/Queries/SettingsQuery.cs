@@ -35,6 +35,6 @@ namespace Staat.GraphQL.Queries
         [UseProjection]
         [UseFiltering]
         [UseSorting]
-        public IQueryable<Settings> GetSettings([ScopedService] ApplicationDbContext context) => context.Settings.FromCache().AsQueryable();
+        public IQueryable<Settings> GetSettings([ScopedService] ApplicationDbContext context) => context.Settings.AsQueryable();
     }
 }

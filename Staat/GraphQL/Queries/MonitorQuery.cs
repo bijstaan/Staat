@@ -17,6 +17,6 @@ namespace Staat.GraphQL.Queries
         [UseProjection]
         [UseFiltering]
         [UseSorting]
-        public IQueryable<Monitor> GetMonitors([ScopedService] ApplicationDbContext context) => context.Monitor.FromCache().AsQueryable();
+        public IQueryable<Monitor> GetMonitors([ScopedService] ApplicationDbContext context) => context.Monitor.AsQueryable();
     }
 }
