@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Types;
-using Microsoft.EntityFrameworkCore;
 using Staat.Data;
 using Staat.Extensions;
 using Staat.GraphQL.Mutations.Inputs.Service;
@@ -27,18 +26,22 @@ namespace Staat.GraphQL.Mutations
             {
                 Name = input.Name,
                 Description = input.Description,
-                Group = await context.ServiceGroup.FirstAsync(x => x.Id == input.ServiceGroupId, cancellationToken: cancellationToken),
-                Parent = await context.Service.FirstAsync(x => x.Id == input.ParentId, cancellationToken: cancellationToken),
+                Group = await context.ServiceGroup.DeferredFirst(x => x.Id == input.ServiceGroupId).FromCacheAsync(cancellationToken),
+                Parent = await context.Service.DeferredFirst(x => x.Id == input.ParentId).FromCacheAsync(cancellationToken),
                 Url = input.Url,
-                Status = await context.Status.FirstAsync(x => x.Id == input.StatusId, cancellationToken: cancellationToken)
+                Status = await context.Status.DeferredFirst(x => x.Id == input.StatusId).FromCacheAsync(cancellationToken)
             };
+            context.Service.Add(service);
+            await context.SaveChangesAsync(cancellationToken);
+            QueryCacheManager.ExpireType<Service>();
             return new ServiceBasePayload(service);
         }
 
+        [UseApplicationContext]
         public async Task<ServiceBasePayload> UpdateService(UpdateServiceInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
-            var service = await context.Service.FirstAsync(x => x.Id == input.ServiceId, cancellationToken: cancellationToken);
+            var service = await context.Service.DeferredFirst(x => x.Id == input.ServiceId).FromCacheAsync(cancellationToken);
             if (service is null)
             {
                 return new ServiceBasePayload(
@@ -61,26 +64,31 @@ namespace Staat.GraphQL.Mutations
 
             if (input.ParentId.HasValue)
             {
-                service.Parent = await context.Service.FirstAsync(x => x.Id == input.ParentId, cancellationToken: cancellationToken);
+                service.Parent = await context.Service.DeferredFirst(x => x.Id == input.ParentId).FromCacheAsync(cancellationToken);
             }
             
             await context.SaveChangesAsync(cancellationToken);
-            
+            QueryCacheManager.ExpireType<Service>();
             return new ServiceBasePayload(service);
         }
         
+        [UseApplicationContext]
         public async Task<ServiceBasePayload> DeleteService(DeleteServiceInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
-            var service = await context.Service.FirstAsync(x => x.Id == input.ServiceId, cancellationToken: cancellationToken);
-
+            var service = await context.Service
+                .IncludeOptimized(x => x.Incidents)
+                .IncludeOptimized(x => x.Maintenance)
+                .IncludeOptimized(x => x.Children)
+                .IncludeOptimized(x => x.Monitors)
+                .DeferredFirst(x => x.Id == input.ServiceId).FromCacheAsync(cancellationToken);
             await service.Incidents.AsQueryable().DeleteAsync(cancellationToken: cancellationToken);
             await service.Maintenance.AsQueryable().DeleteAsync(cancellationToken: cancellationToken);
             await service.Children.AsQueryable().DeleteAsync(cancellationToken: cancellationToken);
             await service.Monitors.AsQueryable().DeleteAsync(cancellationToken: cancellationToken);
             context.Remove(service);
             await context.BulkSaveChangesAsync(cancellationToken);
-            
+            QueryCacheManager.ExpireType<Service>();
             return new ServiceBasePayload(service);
         }
     }

@@ -134,6 +134,7 @@ namespace Staat
                 .AddTypeExtension<ServiceGroupMutation>()
                 .AddTypeExtension<ServiceMutation>()
                 .AddTypeExtension<SettingMutation>()
+                .AddTypeExtension<StatusMutation>()
                 .AddSubscriptionType(d => d.Name("Subscription"))
                 .AddTypeExtension<ServiceSubscription>()
                 .UseAutomaticPersistedQueryPipeline()

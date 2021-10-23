@@ -12,6 +12,7 @@ using Staat.GraphQL.Mutations.Inputs.Setting;
 using Staat.GraphQL.Mutations.Payloads.Setting;
 using Staat.Helpers;
 using Staat.Models;
+using Z.EntityFramework.Plus;
 
 namespace Staat.GraphQL.Mutations
 {
@@ -30,6 +31,7 @@ namespace Staat.GraphQL.Mutations
             };
             await context.Settings.AddAsync(setting, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
+            QueryCacheManager.ExpireType<Settings>();
             return new SettingBasePayload(setting);
         }
 
@@ -37,7 +39,7 @@ namespace Staat.GraphQL.Mutations
         public async Task<SettingBasePayload> UpdateSetting(AddSettingInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
-            Settings? setting = await context.Settings.Where(x => x.Key == input.Key).FirstAsync(cancellationToken: cancellationToken);
+            Settings? setting = await context.Settings.DeferredFirst(x => x.Key == input.Key).FromCacheAsync(cancellationToken);
             if (setting is null)
             {
                 return new SettingBasePayload(
@@ -45,7 +47,7 @@ namespace Staat.GraphQL.Mutations
             }
             setting.Value = input.Value;
             await context.SaveChangesAsync(cancellationToken);
-            
+            QueryCacheManager.ExpireType<Settings>();
             return new SettingBasePayload(setting);
         }
     }

@@ -49,6 +49,7 @@ namespace Staat.GraphQL.Mutations
         {
             _httpContextAccessor = httpContextAccessor;
         }
+        
         [UseApplicationContext]
         public async Task<IncidentBasePayload> AddIncidentAsync(AddIncidentInput input,
             [ScopedService] ApplicationDbContext context, [FromServices] IFluentEmail email, CancellationToken cancellationToken)
@@ -64,10 +65,10 @@ namespace Staat.GraphQL.Mutations
                 Title = input.Title,
                 Description = input.Description,
                 DescriptionHtml = MarkdownHelper.ToHtml(input.Description),
-                Service = await context.Service.FirstAsync(x => x.Id == input.ServiceId, cancellationToken: cancellationToken),
+                Service = await context.Service.DeferredFirst(x => x.Id == input.ServiceId).FromCacheAsync(cancellationToken),
                 StartedAt = input.StartedAt,
                 EndedAt = endedAt,
-                Author = await context.User.FirstAsync(x => x.Id == Int32.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)!.Value), cancellationToken: cancellationToken)
+                Author = await context.User.DeferredFirst(x => x.Id == Int32.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)!.Value)).FromCacheAsync(cancellationToken)
             };
             await context.Incident.AddAsync(incident, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
@@ -87,14 +88,15 @@ namespace Staat.GraphQL.Mutations
                     Attachments = incident.Files
                 }).SendAsync();
             }*/
-
+            QueryCacheManager.ExpireType<Incident>();
             return new IncidentBasePayload(incident);
         }
 
+        [UseApplicationContext]
         public async Task<IncidentBasePayload> UpdateIncidentAsync(UpdateIncidentInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
-            Incident? incident = await context.Incident.FirstAsync(x => x.Id == input.Id, cancellationToken: cancellationToken);
+            var incident = await context.Incident.DeferredFirst(x => x.Id == input.Id).FromCacheAsync(cancellationToken);
             if (incident is null)
             {
                 return new IncidentBasePayload(
@@ -113,7 +115,7 @@ namespace Staat.GraphQL.Mutations
             
             if (input.ServiceId.HasValue)
             {
-                incident.Service = await context.Service.FirstAsync(x => x.Id == input.ServiceId, cancellationToken: cancellationToken);
+                incident.Service = await context.Service.DeferredFirst(x => x.Id == input.ServiceId).FromCacheAsync(cancellationToken);
             }
             
             if (input.StartedAt.HasValue)
@@ -127,6 +129,7 @@ namespace Staat.GraphQL.Mutations
             }
             
             await context.SaveChangesAsync(cancellationToken);
+            QueryCacheManager.ExpireType<Incident>();
             return new IncidentBasePayload(incident);
         }
     }

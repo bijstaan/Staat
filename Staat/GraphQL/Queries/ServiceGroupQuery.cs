@@ -23,6 +23,7 @@ using HotChocolate.Types;
 using Staat.Data;
 using Staat.Extensions;
 using Staat.Models;
+using Z.EntityFramework.Plus;
 
 namespace Staat.GraphQL.Queries
 {
@@ -34,7 +35,7 @@ namespace Staat.GraphQL.Queries
         [UseProjection]
         [UseFiltering]
         [UseSorting]
-        public IQueryable<ServiceGroup> GetServiceGroups([ScopedService] ApplicationDbContext context) => context.ServiceGroup.AsQueryable();
+        public IQueryable<ServiceGroup> GetServiceGroups([ScopedService] ApplicationDbContext context) => context.ServiceGroup.FromCache().AsQueryable();
     }
     
 }

@@ -5,6 +5,7 @@ using HotChocolate.Types;
 using Staat.Data;
 using Staat.Extensions;
 using Staat.Models;
+using Z.EntityFramework.Plus;
 
 namespace Staat.GraphQL.Queries
 {
@@ -16,6 +17,6 @@ namespace Staat.GraphQL.Queries
         [UseProjection]
         [UseFiltering]
         [UseSorting]
-        public IQueryable<Monitor> GetMonitors([ScopedService] ApplicationDbContext context) => context.Monitor.AsQueryable();
+        public IQueryable<Monitor> GetMonitors([ScopedService] ApplicationDbContext context) => context.Monitor.FromCache().AsQueryable();
     }
 }

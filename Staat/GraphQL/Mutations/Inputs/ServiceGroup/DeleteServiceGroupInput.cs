@@ -1,4 +1,4 @@
 namespace Staat.GraphQL.Mutations.Inputs.ServiceGroup
 {
-    public record DeleteServiceGroupInput(int ServiceGroupId);
+    public record DeleteServiceGroupInput(int ServiceGroupId, int ReplacementGroupId);
 }

@@ -38,16 +38,15 @@ namespace Staat.GraphQL.Mutations
             CancellationToken cancellationToken)
         {
             var incident = await context.Incident.IncludeOptimized(x => x.Service)
-                .FirstAsync(x => x.Id == input.IncidentId, cancellationToken: cancellationToken);
+                .DeferredFirst(x => x.Id == input.IncidentId).FromCacheAsync(cancellationToken);
             var status =
-                await context.Status.FirstAsync(x => x.Id == input.StatusId, cancellationToken: cancellationToken);
+                await context.Status.DeferredFirst(x => x.Id == input.StatusId).FromCacheAsync(cancellationToken);
             var incidentMessage = new IncidentMessage
             {
                 Message = input.Message,
                 MessageHtml = MarkdownHelper.ToHtml(input.Message),
-                Author = await context.User.FirstAsync(
-                    x => x.Id == Int32.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)!.Value),
-                    cancellationToken: cancellationToken),
+                Author = await context.User.DeferredFirst(
+                    x => x.Id == Int32.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Name)!.Value)).FromCacheAsync(cancellationToken),
                 Incident = incident,
                 Status = status
             };
@@ -74,7 +73,7 @@ namespace Staat.GraphQL.Mutations
                     Attachments = incidentMessage.Attachments
                 }).SendAsync();
             }*/
-
+            QueryCacheManager.ExpireType<IncidentMessage>();
             return new IncidentMessageBasePayload(incidentMessage);
         }
 
@@ -82,10 +81,10 @@ namespace Staat.GraphQL.Mutations
         public async Task<IncidentMessageBasePayload> UpdateIncidentMessage(UpdateIncidentMessageInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
-            IncidentMessage? incidentMessage = await context.IncidentMessage
+            var incidentMessage = await context.IncidentMessage
                 .Include(x => x.Incident)
                 .ThenInclude(x => x.Service)
-                .FirstAsync(x => x.Id == input.MessageId, cancellationToken: cancellationToken);
+                .DeferredFirst(x => x.Id == input.MessageId).FromCacheAsync(cancellationToken);
             if (incidentMessage is null)
             {
                 return new IncidentMessageBasePayload(
@@ -94,8 +93,7 @@ namespace Staat.GraphQL.Mutations
 
             if (input.StatusId.HasValue)
             {
-                var status = await context.Status.FirstAsync(x => x.Id == input.StatusId,
-                    cancellationToken: cancellationToken);
+                var status = await context.Status.DeferredFirst(x => x.Id == input.StatusId).FromCacheAsync(cancellationToken);
                 incidentMessage.Status = status;
                 incidentMessage.Incident.Service.Status = status;
             }
@@ -108,8 +106,7 @@ namespace Staat.GraphQL.Mutations
 
             if (input.IncidentId.HasValue)
             {
-                var incident = await context.Incident.FirstAsync(x => x.Id == input.IncidentId,
-                    cancellationToken: cancellationToken);
+                var incident = await context.Incident.DeferredFirst(x => x.Id == input.IncidentId).FromCacheAsync(cancellationToken);
                 incidentMessage.Incident = incident;
             }
 
@@ -118,15 +115,15 @@ namespace Staat.GraphQL.Mutations
                 incidentMessage.Attachments = await addAttachments(input.AttachedFilesIds.Value, context, cancellationToken);;
             }
             await context.BulkSaveChangesAsync(cancellationToken);
-            return new IncidentMessageBasePayload(new IncidentMessage());
+            QueryCacheManager.ExpireType<IncidentMessage>();
+            return new IncidentMessageBasePayload(incidentMessage);
         }
 
         [UseApplicationContext]
         public async Task<IncidentMessageBasePayload> DeleteIncidentMessage(DeleteIncidentMessageInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
-            IncidentMessage? incidentMessage = await context.IncidentMessage.FirstAsync(x => x.Id == input.MessageId,
-                cancellationToken: cancellationToken);
+            var incidentMessage = await context.IncidentMessage.DeferredFirst(x => x.Id == input.MessageId).FromCacheAsync(cancellationToken);
             if (incidentMessage is null)
             {
                 return new IncidentMessageBasePayload(
@@ -134,6 +131,7 @@ namespace Staat.GraphQL.Mutations
             }
             context.Remove(incidentMessage);
             await context.SaveChangesAsync(cancellationToken);
+            QueryCacheManager.ExpireType<IncidentMessage>();
             return new IncidentMessageBasePayload(incidentMessage);
         }
 

@@ -29,15 +29,17 @@ namespace Staat.GraphQL.Mutations
                 Description = input.Description,
                 Color = input.Color
             };
-            context.Status.Add(status);
+            await context.Status.AddAsync(status, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
+            QueryCacheManager.ExpireType<Status>();
             return new StatusBasePayload(status);
         }
         
+        [UseApplicationContext]
         public async Task<StatusBasePayload> UpdateStatus(UpdateStatusInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
-            var status = await context.Status.FirstAsync(x => x.Id == input.Id, cancellationToken: cancellationToken);
+            var status = await context.Status.DeferredFirst(x => x.Id == input.Id).FromCacheAsync(cancellationToken);
             if (status is null)
             {
                 return new StatusBasePayload(
@@ -58,21 +60,23 @@ namespace Staat.GraphQL.Mutations
             {
                 status.Name = input.Name;
             }
+            QueryCacheManager.ExpireType<Status>();
             return new StatusBasePayload(status);
         }
         
+        [UseApplicationContext]
         public async Task<StatusBasePayload> DeleteStatus(DeleteStatusInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
-            var status = await context.Status.FirstAsync(x => x.Id == input.Id);
-            var replacementStatus = await context.Status.FirstAsync(x => x.Id == input.ReplacementId);
+            var status = await context.Status.DeferredFirst(x => x.Id == input.Id).FromCacheAsync(cancellationToken);
+            var replacementStatus = await context.Status.DeferredFirst(x => x.Id == input.ReplacementId).FromCacheAsync(cancellationToken);
             if (status is null || replacementStatus is null)
             {
                 return new StatusBasePayload(
                     new UserError("Status with that id not found.", "STATUS_NOT_FOUND"));
             }
-            var services = context.Service.Where(x => x.Status == status).IncludeOptimized(x => x.Status).AsQueryable();
-            var incidentMessages = context.IncidentMessage.Where(x => x.Status == status).IncludeOptimized(x => x.Status).AsQueryable();
+            var services = context.Service.Where(x => x.Status == status).IncludeOptimized(x => x.Status).FromCache().AsQueryable();
+            var incidentMessages = context.IncidentMessage.Where(x => x.Status == status).IncludeOptimized(x => x.Status).FromCache().AsQueryable();
             foreach (var service in services)
             {
                 service.Status = replacementStatus;
@@ -83,6 +87,7 @@ namespace Staat.GraphQL.Mutations
             }
             context.Status.Remove(status);
             await context.BulkSaveChangesAsync(cancellationToken);
+            QueryCacheManager.ExpireType<Status>();
             return new StatusBasePayload(status);
         }
     }

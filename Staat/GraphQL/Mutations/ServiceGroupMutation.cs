@@ -24,12 +24,14 @@ using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Types;
 using Microsoft.EntityFrameworkCore;
+using NetBox.Extensions;
 using Staat.Data;
 using Staat.Extensions;
 using Staat.GraphQL.Mutations.Inputs.ServiceGroup;
 using Staat.GraphQL.Mutations.Payloads.ServiceGroup;
 using Staat.Helpers;
 using Staat.Models;
+using Z.EntityFramework.Plus;
 
 namespace Staat.GraphQL.Mutations
 {
@@ -38,7 +40,6 @@ namespace Staat.GraphQL.Mutations
     public class ServiceGroupMutation
     {
         [UseApplicationContext]
-        [Authorize]
         public async Task<ServiceGroupBasePayload> AddServiceGroupAsync(AddServiceGroupInput input, [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
             var serviceGroup = new ServiceGroup
@@ -49,14 +50,14 @@ namespace Staat.GraphQL.Mutations
             };
             await context.ServiceGroup.AddAsync(serviceGroup, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
+            QueryCacheManager.ExpireType<ServiceGroup>();
             return new ServiceGroupBasePayload(serviceGroup);
         }
         [UseApplicationContext]
-        [Authorize]
         public async Task<ServiceGroupBasePayload> UpdateServiceGroupAsync(UpdateServiceGroupInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
-            ServiceGroup? serviceGroup = await context.ServiceGroup.FindAsync(input.Id);
+            var serviceGroup = await context.ServiceGroup.DeferredFirst(x => x.Id == input.Id).FromCacheAsync(cancellationToken);
             if (serviceGroup is null)
             {
                 return new ServiceGroupBasePayload(
@@ -79,6 +80,7 @@ namespace Staat.GraphQL.Mutations
             }
             
             await context.SaveChangesAsync(cancellationToken);
+            QueryCacheManager.ExpireType<ServiceGroup>();
             return new ServiceGroupBasePayload(serviceGroup);
         }
 
@@ -86,9 +88,16 @@ namespace Staat.GraphQL.Mutations
         public async Task<ServiceGroupBasePayload> DeleteServiceGroup(DeleteServiceGroupInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
-            ServiceGroup? serviceGroup = await context.ServiceGroup.FindAsync(input.ServiceGroupId);
-            context.Remove(serviceGroup);
+            var serviceGroup = await context.ServiceGroup.DeferredFirst(x => x.Id == input.ServiceGroupId).FromCacheAsync(cancellationToken);
+            var replacementGroup = await context.ServiceGroup.DeferredFirst(x => x.Id == input.ReplacementGroupId).FromCacheAsync(cancellationToken);
+            var services = await context.Service.Where(x => x.Group == serviceGroup).FromCacheAsync(cancellationToken);
+            foreach (var service in services)
+            {
+                service.Group = replacementGroup;
+            }
+            context.ServiceGroup.Remove(serviceGroup);
             await context.SaveChangesAsync(cancellationToken);
+            QueryCacheManager.ExpireType<ServiceGroup>();
             return new ServiceGroupBasePayload(serviceGroup);
         }
     }
