@@ -1,0 +1,25 @@
+version: '3.3'
+services:
+  staat:
+    build: .
+    ports:
+      - '80:80'
+    restart: always
+    volumes:
+      - /var/storage
+      - /root/.aspnet/DataProtection-Keys
+    depends_on: 
+      - mssql_db
+    container_name: staat_backend
+
+  mssql_db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MYSQL_DATABASE=Staat_new
+      - SA_PASSWORD=iAmRoot1234
+    container_name: staat_mssql_database
+    volumes:
+      - /var/lib/mysql
