@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using HotChocolate.Data;
 
 namespace Staat.Models
@@ -28,7 +29,14 @@ namespace Staat.Models
         [Key] public int Id { get; set; }
         [Required, MaxLength(100), StringLength(100)] public string Name { get; set; }
         [MaxLength(255), StringLength(255)] public string Description { get; set; }
-        public bool DefaultOpen { get; set; }
+        [Column("DefaultOpen")] public int _DefaultOpen { get; set; }
+
+        [NotMapped]
+        public bool DefaultOpen
+        {
+            get => _DefaultOpen != 0;
+            set => _DefaultOpen = value ? 1:0;
+        }
 
         [UseFiltering, UseSorting] public ICollection<Service> Services { get; set; }
 

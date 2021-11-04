@@ -159,6 +159,9 @@ namespace Staat
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(x =>
             {
+                x.ClaimsIssuer = Configuration.GetSection("JwtBearer")["Issuer"];
+                x.Audience = Configuration.GetSection("JwtBearer")["Audience"];
+                x.Authority = Configuration.GetSection("JwtBearer")["Authority"];
                 x.Events = new JwtBearerEvents
                 {
                     OnTokenValidated = context =>
@@ -174,16 +177,18 @@ namespace Staat
                         return Task.CompletedTask;
                     }
                 };
-                var key = Encoding.ASCII.GetBytes(Configuration.GetSection("App")["Secret"]);
-                x.RequireHttpsMetadata = false;
+                var key = Encoding.ASCII.GetBytes(Configuration.GetSection("JwtBearer")["Secret"]);
+                x.RequireHttpsMetadata = true;
                 x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = false,
+                    ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ClockSkew = TimeSpan.FromMinutes(1)
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ClockSkew = TimeSpan.FromMinutes(1),
+                    ValidIssuer = Configuration.GetSection("JwtBearer")["Issuer"],
+                    ValidAudience = Configuration.GetSection("JwtBearer")["Audience"],
                 };
             });
 
@@ -201,7 +206,9 @@ namespace Staat
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDbContextFactory<ApplicationDbContext> context)
         {
+            // Migrate database if it hasn't already been done or there are updates
             context.CreateDbContext().Database.Migrate();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
