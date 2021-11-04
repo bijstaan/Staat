@@ -235,7 +235,7 @@ namespace Staat
             app.UseWebSockets();
             app.UseEndpoints(endpoints => { 
                 endpoints.MapControllers();
-                endpoints.MapGraphQL();
+                endpoints.MapGraphQL("/api/graphql");
             });
             
             app.UseSpa(spa =>
