@@ -1,6 +1,6 @@
 /*
  * Staat - Staat
- * Copyright (C) 2021 Matthew Kilgore (tankerkiller125)
+ * Copyright (C) 2021 Bijstaan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
