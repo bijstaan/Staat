@@ -13,15 +13,15 @@
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
   },
   "dependencies": {
-    "gatsby": "^4.0.0-zz-next.9",
-    "gatsby-plugin-preact": "^5.14.0",
-    "preact": "^10.5.15",
+    "gatsby": "^4.2.0",
+    "gatsby-plugin-preact": "^6.2.0",
+    "preact": "^10.6.1",
     "preact-render-to-string": "^5.1.19",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "prettier": "^2.4.1",
-    "sync-directory": "^4.0.5"
+    "prettier": "^2.5.0",
+    "sync-directory": "^4.0.7"
   }
 }
