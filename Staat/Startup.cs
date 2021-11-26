@@ -247,7 +247,7 @@ namespace Staat
                     // if you just prefer to proxy requests from client app, use proxy to SPA dev server instead,
                     // app should be already running before starting a .NET client:
                     // run npm process with client app
-                    spa.UseProxyToSpaDevelopmentServer($"http://localhost:8080");
+                    spa.UseProxyToSpaDevelopmentServer($"http://localhost:8000");
                 }
             });
             
