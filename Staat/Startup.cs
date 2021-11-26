@@ -216,7 +216,10 @@ namespace Staat
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Staat v1"));
             }
 
-            app.UseHttpsRedirection();
+            if (bool.Parse(Configuration.GetSection("App")["RedirectToHttps"]))
+            {
+                app.UseHttpsRedirection();
+            }
 
             app.UseRouting();
 
