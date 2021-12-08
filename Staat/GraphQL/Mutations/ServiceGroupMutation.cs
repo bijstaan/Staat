@@ -22,6 +22,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
+using HotChocolate.Data;
 using HotChocolate.Types;
 using Microsoft.EntityFrameworkCore;
 using NetBox.Extensions;
@@ -39,7 +40,7 @@ namespace Staat.GraphQL.Mutations
     [Authorize]
     public class ServiceGroupMutation
     {
-        [UseApplicationContext]
+        [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<ServiceGroupBasePayload> AddServiceGroupAsync(AddServiceGroupInput input, [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
             var serviceGroup = new ServiceGroup
@@ -53,7 +54,7 @@ namespace Staat.GraphQL.Mutations
             QueryCacheManager.ExpireType<ServiceGroup>();
             return new ServiceGroupBasePayload(serviceGroup);
         }
-        [UseApplicationContext]
+        [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<ServiceGroupBasePayload> UpdateServiceGroupAsync(UpdateServiceGroupInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
@@ -84,7 +85,7 @@ namespace Staat.GraphQL.Mutations
             return new ServiceGroupBasePayload(serviceGroup);
         }
 
-        [UseApplicationContext]
+        [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<ServiceGroupBasePayload> DeleteServiceGroup(DeleteServiceGroupInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {

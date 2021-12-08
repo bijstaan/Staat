@@ -21,7 +21,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Security;
+using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -42,32 +44,30 @@ namespace Staat.Jobs.Checks
         {
             try
             {
-                var first = _context.Service.Where(h => h.Monitors.Contains(monitor)).First();
                 var service = _context.Service.First(x => x.Monitors.Contains(monitor));
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                HttpWebRequest request = WebRequest.Create(monitor.Host) as HttpWebRequest;
+                HttpClientHandler handler = new HttpClientHandler();
                 if (monitor.ValidateSsl != null && (bool) monitor.ValidateSsl)
                 {
-                    if (request != null) request.ServerCertificateValidationCallback = ValidationCheck;
+                    handler.ServerCertificateCustomValidationCallback = ValidationCheck;
+                    handler.SslProtocols = SslProtocols.Tls13 | SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls;
                 }
+                HttpClient client = new HttpClient(handler);
+                client.DefaultRequestHeaders.Add("User-Agent", "Staat/1.0 (+https://github.com/Bijstaan/Staat)");
 
-                if (request != null)
-                    request.UserAgent =
-                        "Mozilla/5.0 (compatible: NetCoreStatus/1.0: +https://github.com/tankerkiller125/NetCoreStatus)";
+                var response = await client.GetAsync(monitor.Host);
                 bool serviceAvailable;
                 string failureReason = "";
-                try
+                if (response.IsSuccessStatusCode)
                 {
-                    await request.GetResponseAsync();
                     serviceAvailable = true;
                 }
-                catch (Exception e)
+                else
                 {
                     serviceAvailable = false;
-                    failureReason = e.Message;
+                    failureReason = response.ReasonPhrase;
                 }
-
                 sw.Stop();
                 if (!serviceAvailable)
                 {

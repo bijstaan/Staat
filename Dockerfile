@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS staat_build
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS staat_build
 WORKDIR /source
 
 # copy csproj and restore as distinct layers
@@ -15,7 +15,7 @@ RUN dotnet publish -c release -o /app -r alpine-x64 --no-restore -p:PublishSingl
 # /p:PublishTrimmed=false /p:PublishReadyToRun=false
 
 # final stage/image
-FROM mcr.microsoft.com/dotnet/runtime-deps:5.0-alpine-amd64
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-alpine-amd64
 WORKDIR /app
 COPY --from=staat_build /app ./
 

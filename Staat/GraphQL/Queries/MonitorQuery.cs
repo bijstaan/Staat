@@ -30,7 +30,7 @@ namespace Staat.GraphQL.Queries
     [ExtendObjectType(OperationTypeNames.Query)]
     public class MonitorQuery
     {
-        [UseApplicationContext]
+        [UseDbContext(typeof(ApplicationDbContext))]
         [UsePaging(MaxPageSize = 50)]
         [UseProjection]
         [UseFiltering]

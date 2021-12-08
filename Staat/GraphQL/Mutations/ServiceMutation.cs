@@ -21,7 +21,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
+using HotChocolate.Data;
 using HotChocolate.Types;
+using Microsoft.EntityFrameworkCore;
+using NetBox.Extensions;
 using Staat.Data;
 using Staat.Extensions;
 using Staat.GraphQL.Mutations.Inputs.Service;
@@ -37,7 +40,7 @@ namespace Staat.GraphQL.Mutations
     public class ServiceMutation
     {
 
-        [UseApplicationContext]
+        [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<ServiceBasePayload> AddService(AddServiceInput input, [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
             var service = new Service
@@ -55,7 +58,7 @@ namespace Staat.GraphQL.Mutations
             return new ServiceBasePayload(service);
         }
 
-        [UseApplicationContext]
+        [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<ServiceBasePayload> UpdateService(UpdateServiceInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
@@ -90,20 +93,16 @@ namespace Staat.GraphQL.Mutations
             return new ServiceBasePayload(service);
         }
         
-        [UseApplicationContext]
+        [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<ServiceBasePayload> DeleteService(DeleteServiceInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
             var service = await context.Service
-                .IncludeOptimized(x => x.Incidents)
                 .IncludeOptimized(x => x.Maintenance)
-                .IncludeOptimized(x => x.Children)
-                .IncludeOptimized(x => x.Monitors)
                 .DeferredFirst(x => x.Id == input.ServiceId).FromCacheAsync(cancellationToken);
-            await service.Incidents.AsQueryable().DeleteAsync(cancellationToken: cancellationToken);
-            await service.Maintenance.AsQueryable().DeleteAsync(cancellationToken: cancellationToken);
-            await service.Children.AsQueryable().DeleteAsync(cancellationToken: cancellationToken);
-            await service.Monitors.AsQueryable().DeleteAsync(cancellationToken: cancellationToken);
+            await context.Incident.Where(x => x.Service == service).DeleteAsync(cancellationToken: cancellationToken);
+            await context.Service.Where(x => x.Parent == service).DeleteAsync(cancellationToken: cancellationToken);
+            await context.Monitor.Where(x => x.Service == service).DeleteAsync(cancellationToken: cancellationToken);
             context.Remove(service);
             await context.BulkSaveChangesAsync(cancellationToken);
             QueryCacheManager.ExpireType<Service>();

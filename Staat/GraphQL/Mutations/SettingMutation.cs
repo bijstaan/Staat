@@ -22,6 +22,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
+using HotChocolate.Data;
 using HotChocolate.Types;
 using Microsoft.EntityFrameworkCore;
 using Staat.Data;
@@ -38,7 +39,7 @@ namespace Staat.GraphQL.Mutations
     [Authorize]
     public class SettingMutation
     {
-        [UseApplicationContext]
+        [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<SettingBasePayload> AddSetting(AddSettingInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
@@ -53,7 +54,7 @@ namespace Staat.GraphQL.Mutations
             return new SettingBasePayload(setting);
         }
 
-        [UseApplicationContext]
+        [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<SettingBasePayload> UpdateSetting(AddSettingInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {

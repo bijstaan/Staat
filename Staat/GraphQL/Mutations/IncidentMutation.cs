@@ -26,6 +26,7 @@ using System.Threading.Tasks;
 using FluentEmail.Core;
 using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
+using HotChocolate.Data;
 using HotChocolate.Types;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +51,7 @@ namespace Staat.GraphQL.Mutations
             _httpContextAccessor = httpContextAccessor;
         }
         
-        [UseApplicationContext]
+        [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<IncidentBasePayload> AddIncidentAsync(AddIncidentInput input,
             [ScopedService] ApplicationDbContext context, [FromServices] IFluentEmail email, CancellationToken cancellationToken)
         {
@@ -92,7 +93,7 @@ namespace Staat.GraphQL.Mutations
             return new IncidentBasePayload(incident);
         }
 
-        [UseApplicationContext]
+        [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<IncidentBasePayload> UpdateIncidentAsync(UpdateIncidentInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {

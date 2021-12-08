@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Staat.Data;
 using Staat.Models;
@@ -43,21 +44,20 @@ namespace Staat.Jobs.Checks
             // Create timing for monitor data
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            HttpWebRequest request = WebRequest.Create(_service.Url) as HttpWebRequest;
-            if (request != null)
-                request.UserAgent =
-                    "Mozilla/5.0 (compatible: Staat/1.0: +https://github.com/bijstaan/Staat)";
+            HttpClientHandler handler = new HttpClientHandler();
+            HttpClient client = new HttpClient(handler);
+            client.DefaultRequestHeaders.Add("User-Agent", "Staat/1.0 (+https://github.com/Bijstaan/Staat)");
+            var response = await client.GetAsync(monitor.Host);
             bool serviceAvailable;
             string failureReason = "";
-            try
+            if (response.IsSuccessStatusCode)
             {
-                if (request != null) request.GetResponse();
                 serviceAvailable = true;
             }
-            catch (Exception e)
+            else
             {
                 serviceAvailable = false;
-                failureReason = e.Message;
+                failureReason = response.ReasonPhrase;
             }
             sw.Stop();
             if (!serviceAvailable)

@@ -21,6 +21,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
+using HotChocolate.Data;
 using HotChocolate.Types;
 using Microsoft.EntityFrameworkCore;
 using Staat.Data;
@@ -37,7 +38,7 @@ namespace Staat.GraphQL.Mutations
     [Authorize]
     public class StatusMutation
     {
-        [UseApplicationContext]
+        [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<StatusBasePayload> AddStatus(AddStatusInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
@@ -53,7 +54,7 @@ namespace Staat.GraphQL.Mutations
             return new StatusBasePayload(status);
         }
         
-        [UseApplicationContext]
+        [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<StatusBasePayload> UpdateStatus(UpdateStatusInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
@@ -82,7 +83,7 @@ namespace Staat.GraphQL.Mutations
             return new StatusBasePayload(status);
         }
         
-        [UseApplicationContext]
+        [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<StatusBasePayload> DeleteStatus(DeleteStatusInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
@@ -93,8 +94,8 @@ namespace Staat.GraphQL.Mutations
                 return new StatusBasePayload(
                     new UserError("Status with that id not found.", "STATUS_NOT_FOUND"));
             }
-            var services = context.Service.Where(x => x.Status == status).IncludeOptimized(x => x.Status).FromCache().AsQueryable();
-            var incidentMessages = context.IncidentMessage.Where(x => x.Status == status).IncludeOptimized(x => x.Status).FromCache().AsQueryable();
+            var services = await context.Service.Where(x => x.Status == status).IncludeOptimized(x => x.Status).FromCacheAsync();
+            var incidentMessages = await context.IncidentMessage.Where(x => x.Status == status).IncludeOptimized(x => x.Status).FromCacheAsync();
             foreach (var service in services)
             {
                 service.Status = replacementStatus;
