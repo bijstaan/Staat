@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunk_staat_spa=self.webpackChunk_staat_spa||[]).push([[678],{704:function(t,e,a){a.r(e),a.d(e,{default:function(){return u}});var n=a(7);function u(){return n.default.createElement("div",null,"Hello world!")}}}]);
-//# sourceMappingURL=component---src-pages-index-js-5e66a4e40abf8915aa14.js.map

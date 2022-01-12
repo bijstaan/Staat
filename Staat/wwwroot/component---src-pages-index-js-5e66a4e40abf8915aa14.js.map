@@ -1,1 +1,0 @@
-{"version":3,"file":"component---src-pages-index-js-5e66a4e40abf8915aa14.js","mappings":"oKAEe,SAASA,IACtB,OAAO","sources":["webpack://@staat/spa/./src/pages/index.js"],"sourcesContent":["import React from \"react\"\r\n\r\nexport default function Home() {\r\n  return <div>Hello world!</div>\r\n}\r\n"],"names":["Home"],"sourceRoot":""}
