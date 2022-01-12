@@ -9,5 +9,13 @@ const PROD_PLUGINS =
 
 module.exports = {
   /* Your site config here */
-  plugins: [...PROD_PLUGINS],
+  plugins: [
+    ...PROD_PLUGINS,
+    {
+      resolve: "gatsby-plugin-apollo",
+      options: {
+        uri: "/api/graphql",
+      },
+    },
+  ],
 }
