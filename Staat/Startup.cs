@@ -198,7 +198,7 @@ namespace Staat
             services.AddControllers();
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "WebApp/dist";
+                configuration.RootPath = "WebApp/public";
             });
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "Staat", Version = "v1"}); });
         }
