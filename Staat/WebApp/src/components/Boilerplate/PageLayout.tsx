@@ -2,6 +2,9 @@ import React from "react"
 
 import Header from "./Header"
 
+import "normalize.css"
+import "../../styles/baseline.css"
+
 interface IProps {
   children: React.ReactChild | React.ReactChild[]
 }
