@@ -47,7 +47,7 @@ namespace Staat.GraphQL.Mutations
             {
                 Name = input.Name,
                 Description = input.Description,
-                DefaultOpen = input.DefaultOpen,
+                _DefaultOpen = input.DefaultOpen,
             };
             await context.ServiceGroup.AddAsync(serviceGroup, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
@@ -77,7 +77,7 @@ namespace Staat.GraphQL.Mutations
 
             if (input.DefaultOpen.HasValue)
             {
-                serviceGroup.DefaultOpen = (bool) input.DefaultOpen!;
+                serviceGroup._DefaultOpen = (bool) input.DefaultOpen!;
             }
             
             await context.SaveChangesAsync(cancellationToken);

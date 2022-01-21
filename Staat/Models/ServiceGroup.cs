@@ -31,13 +31,13 @@ namespace Staat.Models
         [Key] public int Id { get; set; }
         [Required, MaxLength(100), StringLength(100)] public string Name { get; set; }
         [MaxLength(255), StringLength(255)] public string Description { get; set; }
-        [Column("DefaultOpen"), JsonIgnore, GraphQLIgnore] public int _DefaultOpen { get; set; }
+        [Column("DefaultOpen"), JsonIgnore, GraphQLIgnore] public int DefaultOpen { get; set; }
 
-        [NotMapped]
-        public bool DefaultOpen
+        [GraphQLName("defaultOpen"), Column("DefaultOpen", TypeName = "Int")]
+        public bool _DefaultOpen
         {
-            get => _DefaultOpen != 0;
-            set => _DefaultOpen = value ? 1:0;
+            get => DefaultOpen != 0;
+            set => DefaultOpen = value ? 1:0;
         }
 
         [UseFiltering, UseSorting] public ICollection<Service> Services { get; set; }
