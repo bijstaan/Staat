@@ -1,11 +1,11 @@
 import { IService } from "./IService"
 
-export interface IServiceGroup {
+export interface IServiceGroup<Service extends Partial<IService>> {
   id: number
   name: string
   description: string
   defaultOpen: boolean
-  services: IService[]
+  services: Service[]
   createdAt: number
   updatedAt: number
 }

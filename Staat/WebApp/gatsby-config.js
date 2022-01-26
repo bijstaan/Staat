@@ -11,6 +11,8 @@ module.exports = {
   /* Your site config here */
   plugins: [
     ...PROD_PLUGINS,
+    `gatsby-plugin-less`,
+    `gatsby-plugin-material-ui`,
     {
       resolve: "gatsby-plugin-apollo",
       options: {

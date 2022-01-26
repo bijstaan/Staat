@@ -4,7 +4,15 @@ import { IMonitor } from "./IMonitor"
 import { IServiceGroup } from "./IServiceGroup"
 import { IStatus } from "./IStatus"
 
-export interface IService {
+export interface IService<
+  Status extends Partial<IStatus>,
+  Incident extends Partial<IIncident>,
+  ServiceGroup extends Partial<IServiceGroup<any>>,
+  ParentService extends Partial<IService<any, any, any, any, any, any, any>>,
+  ChildService extends Partial<IService<any, any, any, any, any, any, any>>[],
+  Monitor extends Partial<IMonitor>,
+  Maintenance extends Partial<IMaintenance>
+> {
   id: number
 
   createdAt: number
@@ -13,11 +21,11 @@ export interface IService {
   name: string
   description: string
   url: string
-  status: IStatus
-  incidents: IIncident[]
-  group: IServiceGroup
-  parent: IService
-  children: IService[]
-  monitors: IMonitor[]
-  maintenance: IMaintenance[]
+  status: Status
+  incidents: Incident[]
+  group: ServiceGroup
+  parent: ParentService
+  children: ChildService[]
+  monitors: Monitor[]
+  maintenance: Maintenance[]
 }

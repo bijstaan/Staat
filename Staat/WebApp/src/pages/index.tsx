@@ -4,6 +4,7 @@ import { Link } from "gatsby"
 import PageLayout from "../components/Boilerplate/PageLayout"
 import OverallStatus from "../components/OverallStatus"
 import { makeStyles } from "@mui/styles"
+import AllServicesList from "../components/Services/AllServicesList"
 
 const useStyles = makeStyles({
   overallStatus: {
@@ -21,6 +22,8 @@ export default function Home() {
   return (
     <PageLayout>
       <OverallStatus className={classes.overallStatus} />
+
+      <AllServicesList />
     </PageLayout>
   )
 }
