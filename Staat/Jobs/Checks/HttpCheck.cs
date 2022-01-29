@@ -24,7 +24,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Staat.Data;
-using Staat.Models;
+using Staat.Data.Models;
 
 namespace Staat.Jobs.Checks
 {

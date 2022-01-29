@@ -18,6 +18,7 @@
 
 using System.Threading.Tasks;
 using Staat.Data;
+using Staat.Data.Models;
 using Staat.Models;
 
 namespace Staat.Jobs.Checks

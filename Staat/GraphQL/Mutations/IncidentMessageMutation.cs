@@ -31,11 +31,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Staat.Data;
-using Staat.Extensions;
+using Staat.Data.Models;
 using Staat.GraphQL.Mutations.Inputs.IncidentMessage;
 using Staat.GraphQL.Mutations.Payloads.IncidentMessage;
 using Staat.Helpers;
-using Staat.Models;
 using Z.EntityFramework.Plus;
 
 namespace Staat.GraphQL.Mutations

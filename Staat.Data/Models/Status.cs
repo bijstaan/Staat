@@ -18,11 +18,17 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace Staat.Models.Users
+namespace Staat.Data.Models
 {
-    public class AuthenticateModel
+    public class Status : ITimeStampedModel
     {
-        [Required] public string Email { get; set; }
-        [Required] public string Password { get; set; }
+        [Key] public int Id { get; set; }
+        [Required, MaxLength(100), StringLength(100)] public string Name { get; set; }
+        public string Description { get; set; }
+
+        [Required, MaxLength(25), StringLength(25)] public string Color { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }

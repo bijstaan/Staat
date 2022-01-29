@@ -16,20 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
-
-namespace Staat.Models
+namespace Staat.Data.Models
 {
-    [Index(nameof(Key))]
-    public class Settings : ITimeStampedModel
+    public enum MonitorType
     {
-        [Key] public int Id { get; set; }
-        [Required] public string Key { get; set; }
-
-        [Required] public string Value { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        HTTP = 0,
+        HTTPS = 1,
+        TCP = 2,
+        ICMP = 3,
+        SMTP = 4
     }
 }

@@ -16,14 +16,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Staat.Models
+using System.ComponentModel.DataAnnotations;
+
+namespace Staat.Data.Models
 {
-    public enum MonitorType
+    public class MonitorData : ITimeStampedModel
     {
-        HTTP = 0,
-        HTTPS = 1,
-        TCP = 2,
-        ICMP = 3,
-        SMTP = 4
+        [Key] public int Id { get; set; }
+        public long PingTime { get; set; }
+        public bool Available { get; set; }
+        public bool? SslValid { get; set; }
+        public string FailureReason { get; set; }
+
+        [Required] public Monitor Monitor { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }

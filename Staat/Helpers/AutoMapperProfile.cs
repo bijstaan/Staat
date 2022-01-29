@@ -17,7 +17,7 @@
  */
 
 using AutoMapper;
-using Staat.Models.Users;
+using Staat.Data.Models.Users;
 
 namespace Staat.Helpers
 {

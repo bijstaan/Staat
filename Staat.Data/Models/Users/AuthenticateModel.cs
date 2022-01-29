@@ -16,24 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-using HotChocolate;
-using HotChocolate.AspNetCore.Authorization;
 
-namespace Staat.Models.Users
+namespace Staat.Data.Models.Users
 {
-    public class User : ITimeStampedModel
+    public class AuthenticateModel
     {
-        [Key] public int Id { get; set; }
-        [Required] public string FirstName { get; set; }
-        [Required] public string LastName { get; set; }
-        [Required, Authorize] public string Email { get; set; }
-        [Required, JsonIgnore, GraphQLIgnore] public byte[] PasswordHash { get; set; }
-        [Required, JsonIgnore, GraphQLIgnore] public byte[] PasswordSalt { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        [Required] public string Email { get; set; }
+        [Required] public string Password { get; set; }
     }
 }

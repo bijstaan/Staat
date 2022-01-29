@@ -21,6 +21,7 @@ using HotChocolate;
 using HotChocolate.Execution;
 using HotChocolate.Subscriptions;
 using HotChocolate.Types;
+using Staat.Data.Models;
 using Staat.Models;
 
 namespace Staat.GraphQL.Subscriptions

@@ -28,7 +28,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Staat.Data;
-using Staat.Models;
+using Staat.Data.Models;
 
 namespace Staat.Jobs.Checks
 {

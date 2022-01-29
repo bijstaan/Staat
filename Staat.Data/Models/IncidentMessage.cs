@@ -16,12 +16,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
+using System.ComponentModel.DataAnnotations;
+using HotChocolate.AspNetCore.Authorization;
+using Staat.Data.Models.Users;
 
-namespace Staat.Models
+namespace Staat.Data.Models
 {
-    public interface ITimeStampedModel
+    public class IncidentMessage : ITimeStampedModel
     {
+        [Key] public int Id { get; set; }
+        [Required] public string Message { get; set; }
+        [Required] public string MessageHtml { get; set; }
+        [Required] public Status Status { get; set; }
+
+        [Required] public Incident Incident { get; set; }
+        
+        [UseSorting, UseFiltering] public ICollection<File> Attachments { get; set; }
+
+        // We do not display the author publicly
+        [Required, Authorize] public User Author { get; set; }
+
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

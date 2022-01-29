@@ -16,15 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System.ComponentModel.DataAnnotations;
-
-namespace Staat.Models.Users
+namespace Staat.Data.Models.Users
 {
-    public class RegisterModel
+    public class UpdateModel
     {
-        [Required] public string FirstName { get; set; }
-        [Required] public string LastName { get; set; }
-        [Required] public string Email { get; set; }
-        [Required] public string Password { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }

@@ -24,8 +24,8 @@ namespace Staat.GraphQL.Mutations.Payloads.ServiceGroup
 {
     public class ServiceGroupBasePayload : Payload
     {
-        public Models.ServiceGroup? ServiceGroup { get;}
-        public ServiceGroupBasePayload(Models.ServiceGroup serviceGroup)
+        public Data.Models.ServiceGroup? ServiceGroup { get;}
+        public ServiceGroupBasePayload(Data.Models.ServiceGroup serviceGroup)
         {
             ServiceGroup = serviceGroup;
         }

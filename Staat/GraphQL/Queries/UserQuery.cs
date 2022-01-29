@@ -21,8 +21,8 @@ using HotChocolate;
 using HotChocolate.Data;
 using HotChocolate.Types;
 using Staat.Data;
+using Staat.Data.Models.Users;
 using Staat.Extensions;
-using Staat.Models.Users;
 using Z.EntityFramework.Plus;
 
 namespace Staat.GraphQL.Queries

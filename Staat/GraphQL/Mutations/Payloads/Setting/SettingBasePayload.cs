@@ -18,15 +18,16 @@
 
 #nullable enable
 using System.Collections.Generic;
+using Staat.Data.Models;
 using Staat.Helpers;
 
 namespace Staat.GraphQL.Mutations.Payloads.Setting
 {
     public class SettingBasePayload : Payload
     {
-        public Models.Settings? Settings { get;}
+        public Settings? Settings { get;}
         
-        public SettingBasePayload(Models.Settings settings)
+        public SettingBasePayload(Settings settings)
         {
             Settings = settings;
         }

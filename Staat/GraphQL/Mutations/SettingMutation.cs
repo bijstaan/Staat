@@ -26,6 +26,7 @@ using HotChocolate.Data;
 using HotChocolate.Types;
 using Microsoft.EntityFrameworkCore;
 using Staat.Data;
+using Staat.Data.Models;
 using Staat.Extensions;
 using Staat.GraphQL.Mutations.Inputs.Setting;
 using Staat.GraphQL.Mutations.Payloads.Setting;
@@ -43,7 +44,7 @@ namespace Staat.GraphQL.Mutations
         public async Task<SettingBasePayload> AddSetting(AddSettingInput input,
             [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
         {
-            var setting = new Models.Settings()
+            var setting = new Settings()
             {
                 Key = input.Key,
                 Value = input.Value

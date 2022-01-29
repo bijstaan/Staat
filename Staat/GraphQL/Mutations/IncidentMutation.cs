@@ -18,8 +18,6 @@
 
 #nullable enable
 using System;
-using System.Globalization;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,13 +28,11 @@ using HotChocolate.Data;
 using HotChocolate.Types;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Staat.Data;
-using Staat.Extensions;
+using Staat.Data.Models;
 using Staat.GraphQL.Mutations.Inputs.Incident;
 using Staat.GraphQL.Mutations.Payloads.Incident;
 using Staat.Helpers;
-using Staat.Models;
 using Z.EntityFramework.Plus;
 
 namespace Staat.GraphQL.Mutations

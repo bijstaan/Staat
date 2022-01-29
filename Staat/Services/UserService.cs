@@ -21,8 +21,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Staat.Data;
+using Staat.Data.Models.Users;
 using Staat.Helpers;
-using Staat.Models.Users;
 
 namespace Staat.Services
 {

@@ -21,12 +21,12 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Staat.Models.Users;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
+using Staat.Data.Models.Users;
 using Staat.Helpers;
 using Staat.Services;
 

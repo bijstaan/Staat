@@ -21,6 +21,7 @@ using HotChocolate;
 using HotChocolate.Data;
 using HotChocolate.Types;
 using Staat.Data;
+using Staat.Data.Models;
 using Staat.Extensions;
 using Staat.Models;
 using Z.EntityFramework.Plus;

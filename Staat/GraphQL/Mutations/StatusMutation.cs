@@ -23,13 +23,11 @@ using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Data;
 using HotChocolate.Types;
-using Microsoft.EntityFrameworkCore;
 using Staat.Data;
-using Staat.Extensions;
+using Staat.Data.Models;
 using Staat.GraphQL.Mutations.Inputs.Status;
 using Staat.GraphQL.Mutations.Payloads.Status;
 using Staat.Helpers;
-using Staat.Models;
 using Z.EntityFramework.Plus;
 
 namespace Staat.GraphQL.Mutations

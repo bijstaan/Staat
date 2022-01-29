@@ -22,8 +22,8 @@ using Coravel.Invocable;
 using Coravel.Queuing.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Staat.Data;
+using Staat.Data.Models;
 using Staat.Jobs.Checks;
-using Staat.Models;
 
 namespace Staat.Jobs
 {

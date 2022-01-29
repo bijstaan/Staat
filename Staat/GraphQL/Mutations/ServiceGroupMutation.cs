@@ -27,6 +27,7 @@ using HotChocolate.Types;
 using Microsoft.EntityFrameworkCore;
 using NetBox.Extensions;
 using Staat.Data;
+using Staat.Data.Models;
 using Staat.Extensions;
 using Staat.GraphQL.Mutations.Inputs.ServiceGroup;
 using Staat.GraphQL.Mutations.Payloads.ServiceGroup;

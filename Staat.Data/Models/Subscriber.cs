@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Staat - Staat
  * Copyright (C) 2021 Bijstaan
  *
@@ -16,21 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Staat.Models
+namespace Staat.Data.Models
 {
-    public class MonitorData : ITimeStampedModel
+    public class Subscriber : ITimeStampedModel
     {
         [Key] public int Id { get; set; }
-        public long PingTime { get; set; }
-        public bool Available { get; set; }
-        public bool? SslValid { get; set; }
-        public string FailureReason { get; set; }
-
-        [Required] public Monitor Monitor { get; set; }
-
+        [Required, MaxLength(256), StringLength(256), EmailAddress] public string Email { get; set; }
+        [Required] public bool IsVerified { get; set; }
+        [Required] public string VerificationString { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

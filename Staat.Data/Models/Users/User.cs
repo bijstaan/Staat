@@ -16,33 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using HotChocolate.Data;
+using System.Text.Json.Serialization;
+using HotChocolate.AspNetCore.Authorization;
 
-namespace Staat.Models
+namespace Staat.Data.Models.Users
 {
-    public class Service : ITimeStampedModel
+    public class User : ITimeStampedModel
     {
         [Key] public int Id { get; set; }
-        
-        [Required, MaxLength(100), StringLength(100)] public string Name { get; set; }
-
-        [StringLength(255), MaxLength(255)] public string Description { get; set; }
-        [Url] public string Url { get; set; }
-
-        [Required] public Status Status { get; set; }
-
-        [UseFiltering, UseSorting] public ICollection<Incident> Incidents { get; set; }
-        [Required] public ServiceGroup Group { get; set; }
-        public Service Parent { get; set; }
-
-        [UseFiltering, UseSorting] public ICollection<Service> Children { get; set; }
-
-        [UseFiltering, UseSorting] public ICollection<Monitor> Monitors { get; set; }
-
-        [UseFiltering, UseSorting] public ICollection<Maintenance> Maintenance { get; set; }
+        [Required] public string FirstName { get; set; }
+        [Required] public string LastName { get; set; }
+        [Required, Authorize] public string Email { get; set; }
+        [Required, JsonIgnore, GraphQLIgnore] public byte[] PasswordHash { get; set; }
+        [Required, JsonIgnore, GraphQLIgnore] public byte[] PasswordSalt { get; set; }
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

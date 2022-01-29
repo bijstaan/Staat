@@ -59,21 +59,19 @@ namespace Staat
              */
             try
             {
-                var databaseType = Configuration.GetSection("App")["DatabaseType"].ToUpper();
-                switch (databaseType)
+                var provider = Configuration.GetSection("App")["DatabaseType"].ToUpper();
+                services.AddDbContextFactory<ApplicationDbContext>(options => _ = provider switch
                 {
-                    case "MYSQL":
-                        services.AddPooledDbContextFactory<ApplicationDbContext>(ConfigureMySqlDatabase);
-                        break;
-                    case "SQLSERVER":
-                        services.AddPooledDbContextFactory<ApplicationDbContext>(ConfigureMssqlDatabase);
-                        break;
-                    case "POSTGRESQL":
-                        services.AddPooledDbContextFactory<ApplicationDbContext>(ConfigurePostgreSqlDatabase);
-                        break;
-                    default:
-                        throw new Exception($"Unsupported provider: {databaseType}");
-                }
+                    "NPGSQL" => options.UseNpgsql(
+                        Configuration.GetConnectionString("DefaultConnection"),
+                        x => x.MigrationsAssembly("NpgsqlMigrations")),
+
+                    "SQLSERVER" => options.UseSqlServer(
+                        Configuration.GetConnectionString("DefaultConnection"),
+                        x => x.MigrationsAssembly("SqlServerMigrations")),
+
+                    _ => throw new Exception($"Unsupported provider: {provider}")
+                });
             }
             catch (Exception e)
             {
@@ -147,7 +145,7 @@ namespace Staat
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<DbContext, ApplicationDbContext>();
-            
+
             services.AddHttpContextAccessor();
 
             /*
@@ -263,32 +261,6 @@ namespace Staat
             {
                 scheduler.Schedule<CheckForJobs>().EveryFiveSeconds();
             });
-        }
-        
-        /*
-         * Database configurations
-         * All of these use the MemoryCache to make queries nice and fast for repeat things (home page)
-         */
-        private void ConfigureMySqlDatabase(DbContextOptionsBuilder options)
-        {
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-            options.UseMemoryCache(new MemoryCache(new MemoryCacheOptions()));
-        }
-        
-        private void ConfigurePostgreSqlDatabase(DbContextOptionsBuilder options)
-        {
-            options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
-            options.UseMemoryCache(new MemoryCache(new MemoryCacheOptions()));
-        }
-        
-        private void ConfigureMssqlDatabase(DbContextOptionsBuilder options)
-        {
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), builder =>
-            {
-                builder.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
-            });
-            options.UseMemoryCache(new MemoryCache(new MemoryCacheOptions()));
         }
     }
 }

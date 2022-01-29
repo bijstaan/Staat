@@ -29,6 +29,7 @@ using Staat.Data;
 using Staat.Services;
 using Storage.Net.Blobs;
 using GroupDocs.Metadata;
+using File = Staat.Data.Models.File;
 
 namespace Staat.Controllers
 {
@@ -86,7 +87,7 @@ namespace Staat.Controllers
                     Path = $"{HttpContext.Request.PathBase.Value}/{pathNamespace}/{hash}",
                     Name = file.Name
                 });
-                _context.File.Add(new Models.File
+                _context.File.Add(new File
                 {
                     Name = file.FileName,
                     Hash = hash,

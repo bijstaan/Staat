@@ -24,8 +24,8 @@ namespace Staat.GraphQL.Mutations.Payloads.Incident
 {
     public class IncidentBasePayload : Payload
     {
-        public Models.Incident? Incident { get;}
-        public IncidentBasePayload(Models.Incident incident)
+        public Data.Models.Incident? Incident { get;}
+        public IncidentBasePayload(Data.Models.Incident incident)
         {
             Incident = incident;
         }

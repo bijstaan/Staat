@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Staat - Staat
  * Copyright (C) 2021 Bijstaan
  *
@@ -16,28 +16,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using HotChocolate.Data;
+using HotChocolate.AspNetCore.Authorization;
+using Staat.Data.Models.Users;
 
-namespace Staat.Models
+namespace Staat.Data.Models
 {
-    public class File : ITimeStampedModel
+    public class Maintenance : ITimeStampedModel
     {
         [Key] public int Id { get; set; }
-        [Required] public string Name { get; set; }
-        [Required] public string Namespace { get; set; }
-        [Required] public string Hash { get; set; }
-        [Required] public string MimeType { get; set; }
+        [Required, MaxLength(100), StringLength(100)] public string Title { get; set; }
+        [Required] public string Description { get; set; }
+        [Required] public string DescriptionHtml { get; set; }
+        [Required] public DateTime StartedAt { get; set; }
+        [Required] public DateTime? EndedAt { get; set; }
+
+        [UseFiltering, UseSorting] public ICollection<MaintenanceMessage> Messages { get; set; }
+        [UseFiltering, UseSorting] public ICollection<Service> Services { get; set; }
+        [UseSorting, UseFiltering] public ICollection<File> Attachments { get; set; }
         
-        // Models that can attach files
-        [UseSorting, UseFiltering] public ICollection<Incident> Incidents { get; set; }
-        [UseSorting, UseFiltering] public ICollection<IncidentMessage> IncidentMessages { get; set; }
-        [UseSorting, UseFiltering] public ICollection<Maintenance> Maintenances { get; set; }
-        [UseSorting, UseFiltering] public ICollection<MaintenanceMessage> MaintenanceMessages { get; set; }
-        
-        
+        // We do not display the author publicly
+        [Required, Authorize] public User Author { get; set; }
+
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

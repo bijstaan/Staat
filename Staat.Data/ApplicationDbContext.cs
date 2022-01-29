@@ -16,20 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Staat.Helpers;
-using Staat.Models;
-using Staat.Models.Users;
+using Staat.Data.Models;
+using Staat.Data.Models.Users;
 
 namespace Staat.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<File> File { get; set; }
+        public DbSet<Models.File> File { get; set; }
         public DbSet<Incident> Incident { get; set; }
         public DbSet<IncidentMessage> IncidentMessage { get; set; }
         public DbSet<Maintenance> Maintenance { get; set; }

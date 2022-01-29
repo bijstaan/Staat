@@ -24,9 +24,9 @@ namespace Staat.GraphQL.Mutations.Payloads.Status
 {
     public class StatusBasePayload : Payload
     {
-        public Models.Status? Status { get;}
+        public Data.Models.Status? Status { get;}
         
-        public StatusBasePayload(Models.Status settings)
+        public StatusBasePayload(Data.Models.Status settings)
         {
             Status = settings;
         }

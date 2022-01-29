@@ -16,23 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System.Threading.Tasks;
-using Staat.Data;
-using Staat.Data.Models;
-using Staat.Models;
+using System.ComponentModel.DataAnnotations;
 
-namespace Staat.Jobs.Checks
+namespace Staat.Data.Models.Users
 {
-    public class SmtpCheck
+    public class RegisterModel
     {
-        public SmtpCheck(ApplicationDbContext context)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public async Task Invoke(Monitor monitor)
-        {
-            throw new System.NotImplementedException();
-        }
+        [Required] public string FirstName { get; set; }
+        [Required] public string LastName { get; set; }
+        [Required] public string Email { get; set; }
+        [Required] public string Password { get; set; }
     }
 }
