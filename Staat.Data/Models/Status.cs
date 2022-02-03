@@ -24,7 +24,9 @@ namespace Staat.Data.Models
     {
         [Key] public int Id { get; set; }
         [Required, MaxLength(100), StringLength(100)] public string Name { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
+        
+        [Required] public int Severity { get; set; }
 
         [Required, MaxLength(25), StringLength(25)] public string Color { get; set; }
 

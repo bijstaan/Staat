@@ -43,6 +43,7 @@ namespace Staat.GraphQL.Mutations
             var status = new Status
             {
                 Name = input.Name,
+                Severity = input.Severity,
                 Description = input.Description,
                 Color = input.Color
             };
@@ -76,6 +77,10 @@ namespace Staat.GraphQL.Mutations
             if (input.Name.HasValue)
             {
                 status.Name = input.Name;
+            }
+            if (input.Severity.HasValue)
+            {
+                status.Severity = input.Severity;
             }
             QueryCacheManager.ExpireType<Status>();
             return new StatusBasePayload(status);

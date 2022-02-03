@@ -20,6 +20,7 @@ namespace Staat.GraphQL.Mutations.Inputs.Status
 {
     public record AddStatusInput(
         string Name,
+        int Severity,
         string Description,
         string Color
     );
