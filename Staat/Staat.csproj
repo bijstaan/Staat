@@ -20,33 +20,34 @@
         <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="12.6.0" />
         <PackageReference Include="HotChocolate.Data" Version="12.6.0" />
         <PackageReference Include="HotChocolate.Data.EntityFramework" Version="12.6.0" />
-        <PackageReference Include="HotChocolate.PersistedQueries.InMemory" Version="12.3.2" />
-        <PackageReference Include="Markdig" Version="0.26.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
+        <PackageReference Include="HotChocolate.PersistedQueries.InMemory" Version="12.6.0" />
+        <PackageReference Include="Markdig" Version="0.27.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">
+        <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
         <PackageReference Include="MimeKit" Version="2.15.1" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.1" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.3" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.0" />
-        <PackageReference Include="Sentry.AspNetCore" Version="3.12.1" />
+        <PackageReference Include="Sentry.AspNetCore" Version="3.13.0" />
         <PackageReference Include="Storage.Net" Version="8.1.17" />
         <PackageReference Include="Storage.Net.Amazon.Aws" Version="8.1.17" />
         <PackageReference Include="Storage.Net.Gcp.CloudStorage" Version="8.1.17" />
         <PackageReference Include="Storage.Net.Microsoft.Azure.Storage" Version="8.1.17" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.15.0" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.15.1" />
         <PackageReference Include="WebStoating.Markdig.Prism" Version="1.0.0" />
-        <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="6.13.2" />
+        <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="6.13.7" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Staat.Data\Staat.Data.csproj" />
-      <ProjectReference Include="..\Staat.Migrations\Staat.Migrations.csproj" />
+      <ProjectReference Include="..\Staat.Migrations.PostgresSql\Staat.Migrations.PostgresSql.csproj" />
+      <ProjectReference Include="..\Staat.Migrations.SqlServer\Staat.Migrations.SqlServer.csproj" />
     </ItemGroup>
 
     <ItemGroup>

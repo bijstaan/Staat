@@ -64,11 +64,11 @@ namespace Staat
                 {
                     "NPGSQL" => options.UseNpgsql(
                         Configuration.GetConnectionString("DefaultConnection"),
-                        x => x.MigrationsAssembly("NpgsqlMigrations")),
+                        x => x.MigrationsAssembly("Staat.Migrations.PostgresSql")),
 
                     "SQLSERVER" => options.UseSqlServer(
                         Configuration.GetConnectionString("DefaultConnection"),
-                        x => x.MigrationsAssembly("SqlServerMigrations")),
+                        x => x.MigrationsAssembly("Staat.Migrations.SqlServer")),
 
                     _ => throw new Exception($"Unsupported provider: {provider}")
                 });

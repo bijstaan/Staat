@@ -17,7 +17,6 @@
  */
 
 using System.ComponentModel.DataAnnotations;
-using Staat.Models;
 
 namespace Staat.Data.Models
 {

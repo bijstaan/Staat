@@ -17,21 +17,17 @@
  */
 
 #nullable enable
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Data;
 using HotChocolate.Types;
-using Microsoft.EntityFrameworkCore;
 using Staat.Data;
 using Staat.Data.Models;
-using Staat.Extensions;
 using Staat.GraphQL.Mutations.Inputs.Setting;
 using Staat.GraphQL.Mutations.Payloads.Setting;
 using Staat.Helpers;
-using Staat.Models;
 using Z.EntityFramework.Plus;
 
 namespace Staat.GraphQL.Mutations

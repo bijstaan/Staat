@@ -44,7 +44,6 @@ namespace Staat.Data
             var newEntities = this.ChangeTracker.Entries()
                 .Where(
                     x => x.State == EntityState.Added &&
-                         x.Entity != null &&
                          x.Entity as ITimeStampedModel != null
                 )
                 .Select(x => x.Entity as ITimeStampedModel);
@@ -52,7 +51,6 @@ namespace Staat.Data
             var modifiedEntities = this.ChangeTracker.Entries() 
                 .Where(
                     x => x.State == EntityState.Modified &&
-                         x.Entity != null &&
                          x.Entity as ITimeStampedModel != null
                 )
                 .Select(x => x.Entity as ITimeStampedModel);
@@ -78,7 +76,6 @@ namespace Staat.Data
             var newEntities = this.ChangeTracker.Entries()
                 .Where(
                     x => x.State == EntityState.Added &&
-                         x.Entity != null &&
                          x.Entity as ITimeStampedModel != null
                 )
                 .Select(x => x.Entity as ITimeStampedModel);
@@ -86,7 +83,6 @@ namespace Staat.Data
             var modifiedEntities = this.ChangeTracker.Entries() 
                 .Where(
                     x => x.State == EntityState.Modified &&
-                         x.Entity != null &&
                          x.Entity as ITimeStampedModel != null
                 )
                 .Select(x => x.Entity as ITimeStampedModel);
