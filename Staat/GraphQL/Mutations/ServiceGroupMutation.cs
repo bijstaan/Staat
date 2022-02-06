@@ -64,7 +64,7 @@ namespace Staat.GraphQL.Mutations
 
             if (input.Name.HasValue)
             {
-                serviceGroup.Name = input.Name;
+                serviceGroup.Name = input.Name!;
             }
 
             if (input.Description.HasValue)

@@ -118,7 +118,7 @@ namespace Staat.GraphQL.Mutations
 
             if (input.Message.HasValue)
             {
-                incidentMessage.Message = input.Message;
+                incidentMessage.Message = input.Message!;
                 incidentMessage.MessageHtml = MarkdownHelper.ToHtml(input.Message);
             }
 

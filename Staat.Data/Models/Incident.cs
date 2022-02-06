@@ -26,7 +26,7 @@ namespace Staat.Data.Models
     {
         [Key] public int Id { get; set; }
         [Required, MaxLength(100), StringLength(100)] public string Title { get; set; }
-        public string Description { get; set; }
+        [Required] public string Description { get; set; }
         public string DescriptionHtml { get; set; }
         [Required] public Service Service { get; set; }
 
@@ -39,8 +39,7 @@ namespace Staat.Data.Models
 
         public DateTime? EndedAt { get; set; }
         
-        [UseFiltering, UseSorting] public ICollection<File> Files { get; set; }
-        
+        [UseFiltering, UseSorting] public ICollection<File>? Files { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

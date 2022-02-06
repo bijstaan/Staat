@@ -31,7 +31,7 @@ namespace Staat.Data.Models
 
         [Required] public Incident Incident { get; set; }
         
-        [UseSorting, UseFiltering] public ICollection<File> Attachments { get; set; }
+        [UseSorting, UseFiltering] public ICollection<File>? Attachments { get; set; }
 
         // We do not display the author publicly
         [Required, Authorize] public User Author { get; set; }

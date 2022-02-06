@@ -60,7 +60,7 @@ namespace Staat.GraphQL.Mutations
             var incident = new Incident
             {
                 Title = input.Title,
-                Description = input.Description,
+                Description = input.Description!,
                 DescriptionHtml = MarkdownHelper.ToHtml(input.Description),
                 Service = await context.Service.DeferredFirst(x => x.Id == input.ServiceId).FromCacheAsync(cancellationToken),
                 StartedAt = input.StartedAt,
@@ -102,12 +102,12 @@ namespace Staat.GraphQL.Mutations
             
             if (input.Title.HasValue)
             {
-                incident.Title = input.Title;
+                incident.Title = input.Title!;
             }
             
             if (input.Description.HasValue)
             {
-                incident.Description = input.Description;
+                incident.Description = input.Description!;
             }
             
             if (input.ServiceId.HasValue)

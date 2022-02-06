@@ -26,7 +26,7 @@ namespace Staat.Data.Models
         public long PingTime { get; set; }
         public bool Available { get; set; }
         public bool? SslValid { get; set; }
-        public string FailureReason { get; set; }
+        public string? FailureReason { get; set; }
 
         [Required] public Monitor Monitor { get; set; }
 

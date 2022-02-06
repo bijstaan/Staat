@@ -33,7 +33,7 @@ namespace Staat.Data.Models
 
         [UseFiltering, UseSorting] public ICollection<MaintenanceMessage> Messages { get; set; }
         [UseFiltering, UseSorting] public ICollection<Service> Services { get; set; }
-        [UseSorting, UseFiltering] public ICollection<File> Attachments { get; set; }
+        [UseSorting, UseFiltering] public ICollection<File>? Attachments { get; set; }
         
         // We do not display the author publicly
         [Required, Authorize] public User Author { get; set; }

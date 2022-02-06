@@ -26,7 +26,7 @@ namespace Staat.Data.Models
     {
         [Key] public int Id { get; set; }
         [Required, MaxLength(100), StringLength(100)] public string Name { get; set; }
-        [MaxLength(255), StringLength(255)] public string Description { get; set; }
+        [MaxLength(255), StringLength(255)] public string? Description { get; set; }
         [Column("DefaultOpen"), JsonIgnore, GraphQLIgnore] public int _DefaultOpen { get; set; }
 
         [NotMapped]
@@ -36,7 +36,7 @@ namespace Staat.Data.Models
             set => _DefaultOpen = value ? 1:0;
         }
 
-        [UseFiltering, UseSorting] public ICollection<Service> Services { get; set; }
+        [UseFiltering, UseSorting] public ICollection<Service>? Services { get; set; }
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
