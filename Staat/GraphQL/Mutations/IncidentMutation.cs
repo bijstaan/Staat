@@ -18,6 +18,8 @@
 
 #nullable enable
 using System;
+using System.Globalization;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,6 +30,8 @@ using HotChocolate.Data;
 using HotChocolate.Types;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Staat.Data;
 using Staat.Data.Models;
 using Staat.GraphQL.Mutations.Inputs.Incident;
@@ -69,29 +73,42 @@ namespace Staat.GraphQL.Mutations
             };
             await context.Incident.AddAsync(incident, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
-
-            /*var subscribers = context.Subscriber.AsQueryable();
-            var template = await context.Settings.Where(x => x.Key == "backend.email.template.incident").FirstAsync(cancellationToken);
-
-            foreach (var subscriber in subscribers)
+            
+            var template = await context.Settings.Where(x => x.Key == "backend.email.template.incident.create").DeferredFirst().FromCacheAsync(cancellationToken);
+            var emailDomain = await context.Settings.Where(x => x.Key == "backend.email.domain").DeferredFirst().FromCacheAsync(cancellationToken);
+            try
             {
-                await email.To(subscriber.Email).UsingTemplate(template.Value, new
+                await context.Subscriber.ForEachAsync((subscriber) =>
                 {
-                    Title = incident.Title, 
-                    Description = incident.DescriptionHtml, 
-                    ServiceName = incident.Service.Name, 
-                    StartedAt = incident.StartedAt.ToString(CultureInfo.InvariantCulture), 
-                    EndedAt = incident.EndedAt?.ToString(CultureInfo.InvariantCulture),
-                    Attachments = incident.Files
-                }).SendAsync();
-            }*/
+                    if (!template.Value.IsNullOrEmpty())
+                    {
+                        email.To(subscriber.Email).Subject($"Incident Created: {incident.Service.Name}").UsingTemplate(template.Value, new
+                        {
+                            Title = incident.Title,
+                            Description = incident.Description,
+                            ServiceName = incident.Service.Name,
+                            StartedAd = incident.StartedAt.ToString(CultureInfo.InvariantCulture),
+                            EndedAt = incident.EndedAt?.ToString(CultureInfo.InvariantCulture),
+                            Attachements = incident.Files
+                        });
+                        // We set the message ID so we can reference it in status updates and what not.
+                        email.Header("Message-ID", $"<{incident.Id}@{emailDomain.Value}>");
+                        email.Send();
+                    }
+                }, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
             QueryCacheManager.ExpireType<Incident>();
             return new IncidentBasePayload(incident);
         }
 
         [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<IncidentBasePayload> UpdateIncidentAsync(UpdateIncidentInput input,
-            [ScopedService] ApplicationDbContext context, CancellationToken cancellationToken)
+            [ScopedService] ApplicationDbContext context, [FromServices] IFluentEmail email, CancellationToken cancellationToken)
         {
             var incident = await context.Incident.DeferredFirst(x => x.Id == input.Id).FromCacheAsync(cancellationToken);
             if (incident is null)
@@ -124,8 +141,9 @@ namespace Staat.GraphQL.Mutations
             {
                 incident.EndedAt = input.EndedAt;
             }
-            
+
             await context.SaveChangesAsync(cancellationToken);
+
             QueryCacheManager.ExpireType<Incident>();
             return new IncidentBasePayload(incident);
         }

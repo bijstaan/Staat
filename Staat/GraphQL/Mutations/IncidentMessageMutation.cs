@@ -19,6 +19,8 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,6 +32,7 @@ using HotChocolate.Types;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Staat.Data;
 using Staat.Data.Models;
 using Staat.GraphQL.Mutations.Inputs.IncidentMessage;
@@ -55,7 +58,7 @@ namespace Staat.GraphQL.Mutations
             [ScopedService] ApplicationDbContext context, [FromServices] IFluentEmail email,
             CancellationToken cancellationToken)
         {
-            var incident = await context.Incident.IncludeOptimized(x => x.Service)
+            var incident = await context.Incident.IncludeOptimized(x => x.Service).IncludeOptimized(x => x.Messages)
                 .DeferredFirst(x => x.Id == input.IncidentId).FromCacheAsync(cancellationToken);
             var status =
                 await context.Status.DeferredFirst(x => x.Id == input.StatusId).FromCacheAsync(cancellationToken);
@@ -77,20 +80,42 @@ namespace Staat.GraphQL.Mutations
 
             await context.IncidentMessage.AddAsync(incidentMessage, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
-
-            /*var subscribers = context.Subscriber.AsQueryable();
+            
+            var emailDomain = await context.Settings.DeferredFirst(x => x.Key == "backend.email.domain").FromCacheAsync(cancellationToken);
             var template = await context.Settings.DeferredFirst(x => x.Key == "backend.email.template.incidentmessage").FromCacheAsync(cancellationToken);
-            foreach (var subscriber in subscribers)
+            try
             {
-                await email.To(subscriber.Email)
-                    .UsingTemplate(template.Value, new
+                await context.Subscriber.ForEachAsync((subscriber) =>
                 {
-                    Message = incidentMessage.MessageHtml, 
-                    ServiceName = incidentMessage.Incident.Service.Name, 
-                    StartedAt = incidentMessage.CreatedAt.ToString(CultureInfo.InvariantCulture),
-                    Attachments = incidentMessage.Attachments
-                }).SendAsync();
-            }*/
+                    if (!template.Value.IsNullOrEmpty())
+                    {
+                        email.To(subscriber.Email).Subject($"Incident Created: {incident.Service.Name}").UsingTemplate(template.Value, new
+                        {
+                            Title = incident.Title,
+                            Description = incident.Description,
+                            ServiceName = incident.Service.Name,
+                            StartedAd = incident.StartedAt.ToString(CultureInfo.InvariantCulture),
+                            EndedAt = incident.EndedAt?.ToString(CultureInfo.InvariantCulture),
+                            Attachements = incident.Files
+                        });
+                        // Build references list from previous incident messages, newest first, oldest last
+                        var references = "";
+                        incident.Messages.OrderByDescending(x => x.CreatedAt).ForEach((message) =>
+                        {
+                            references += $"<{message.Id}+{incident.Id}@{emailDomain.Value}> ";
+                        });
+                        // We set the message ID so we can reference it in status updates and what not.
+                        email.Header("Message-ID", $"<{incidentMessage.Id}+{incident.Id}@{emailDomain.Value}>");
+                        // Build references string for header
+                        email.Header("References", $"<{incidentMessage.Id}+{incident.Id}@{emailDomain.Value}> {references}<{incident.Id}@{emailDomain.Value}>");
+                        email.Send();
+                    }
+                }, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
             QueryCacheManager.ExpireType<IncidentMessage>();
             return new IncidentMessageBasePayload(incidentMessage);
         }
