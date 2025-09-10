@@ -1017,12 +1017,11 @@
     "@babel/plugin-transform-typescript" "^7.15.0"
 
 "@babel/runtime-corejs3@^7.10.2":
-  version "7.15.4"
-  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.15.4.tgz#403139af262b9a6e8f9ba04a6fdcebf8de692bf1"
-  integrity sha512-lWcAqKeB624/twtTc3w6w/2o9RqJPaNBhPGK6DKLSiwuVWC7WFkypWyNg+CpZoyJH0jVzv1uMtXZ/5/lQOLtCg==
+  version "7.28.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.28.4.tgz#c25be39c7997ce2f130d70b9baecb8ed94df93fa"
+  integrity sha512-h7iEYiW4HebClDEhtvFObtPmIvrd1SSfpI9EhOeKk4CtIK/ngBWFpuhCzhdmRKtg71ylcue+9I6dv54XYO1epQ==
   dependencies:
-    core-js-pure "^3.16.0"
-    regenerator-runtime "^0.13.4"
+    core-js-pure "^3.43.0"
 
 "@babel/runtime@^7.10.0", "@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2", "@babel/runtime@^7.15.4", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.4":
   version "7.28.4"
@@ -3178,10 +3177,10 @@ core-js-compat@^3.16.0, core-js-compat@^3.16.2:
     browserslist "^4.17.3"
     semver "7.0.0"
 
-core-js-pure@^3.16.0:
-  version "3.18.3"
-  resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.18.3.tgz#7eed77dcce1445ab68fd68715856633e2fb3b90c"
-  integrity sha512-qfskyO/KjtbYn09bn1IPkuhHl5PlJ6IzJ9s9sraJ1EqcuGyLGKzhSM1cY0zgyL9hx42eulQLZ6WaeK5ycJCkqw==
+core-js-pure@^3.43.0:
+  version "3.45.1"
+  resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.45.1.tgz#b129d86a5f7f8380378577c7eaee83608570a05a"
+  integrity sha512-OHnWFKgTUshEU8MK+lOs1H8kC8GkTi9Z1tvNkxrCcw9wl3MJIO7q2ld77wjWn4/xuGrVu2X+nME1iIIPBSdyEQ==
 
 core-js@^3.17.2:
   version "3.18.3"
@@ -8600,11 +8599,6 @@ regenerate@^1.4.2:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/regenerate/-/regenerate-1.4.2.tgz#b9346d8827e8f5a32f7ba29637d398b69014848a"
   integrity sha512-zrceR/XhGYU/d/opr2EKO7aRHUeiBI8qjtfHqADTwZd6Szfy16la6kqD0MIUs5z5hx6AaKa+PixpPrR289+I0A==
-
-regenerator-runtime@^0.13.4:
-  version "0.13.9"
-  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.9.tgz#8925742a98ffd90814988d7566ad30ca3b263b52"
-  integrity sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==
 
 regenerator-transform@^0.14.2:
   version "0.14.5"
